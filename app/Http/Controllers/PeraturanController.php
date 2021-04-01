@@ -16,20 +16,28 @@ class PeraturanController extends Controller
      */
     public function index()
     {
-        // $peraturans = Peraturan::all();
+        // $peraturans = Peraturan::with('jenis_peraturan')->offset(0)->limit(50)->get();
+        // // $peraturans = Peraturan::find(1);
         // die($peraturans);
     	return view('peraturan.index');
     }
 
     public function getPeraturan(Request $request)
     {
-        // if ($request->ajax()) {
+
+        if ($request->ajax()) {
             // $data = Peraturan::latest()->offset(0)->limit(50)->get();
-            $data = Peraturan::latest()->get();
-           
+            // $start = $request->input('start', '0');
+            // $length = $request->input('length', '10');
+            // $data = Peraturan::latest()->skip($start)->take($length)->get();
+            $data = Peraturan::query();
+            // $data = Peraturan::with('jenis_peraturan');
             // die($data);
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('jenis', function (Peraturan $peraturan){
+                    return $peraturan->jenis_peraturan->keterangan;
+                })
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
                     return $actionBtn;
@@ -37,7 +45,7 @@ class PeraturanController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
             
-        // }
+        }
     }
 
     /**

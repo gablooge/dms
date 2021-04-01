@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Peraturan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,4 +15,9 @@ class JenisPeraturan extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    public function peraturan()
+    {
+        return $this->hasMany(Peraturan::class, 'idjenis');
+    }
 }

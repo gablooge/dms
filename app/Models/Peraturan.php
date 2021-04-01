@@ -18,6 +18,6 @@ class Peraturan extends Model
 
     public function jenis_peraturan()
     {
-        return $this->belongsTo(JenisPeraturan::class, 'IDJENIS');
+        return $this->belongsTo(JenisPeraturan::class, 'idjenis', 'idjenis');
     }
 }

@@ -6,6 +6,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
     <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        div.dataTables_wrapper div.dataTables_processing {
+            height: unset !important;
+            background-color: darkseagreen;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                background-color: #fff;
+            }
+            100% {
+                background-color: darkseagreen;
+            }
+        }
+    </style>
 </head>
 <body>
     
@@ -45,13 +60,19 @@
         paging: true,
         ajax: {
             'url':"{{ route('peraturans.list') }}",
+            "type": "POST",
             'data': function (d) {
-                d._token = '{{ csrf_token() }}';
+                d._token = "{{ csrf_token() }}"
+                //console.log(d)
             }
         },
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'idjenis', name: 'idjenis'},
+            {
+                "data": 'DT_RowIndex',
+                orderable: false, 
+                searchable: false
+            },
+            {data: 'jenis', name: 'jenis'},
             {data: 'nomor', name: 'nomor'},
             {data: 'tahun', name: 'tahun'},
             {data: 'tag', name: 'tag'},
@@ -59,8 +80,8 @@
             {
                 data: 'action', 
                 name: 'action', 
-                orderable: true, 
-                searchable: true
+                orderable: false, 
+                searchable: false
             },
         ]
     });
