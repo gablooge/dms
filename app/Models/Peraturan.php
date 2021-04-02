@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\JenisPeraturan;
-use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 
 class Peraturan extends Model

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class Masalah extends Model
 {
     use HasFactory;
     protected $table = 'REF_MASALAH';
@@ -15,8 +15,8 @@ class Tag extends Model
 
     protected $guarded = [];
 
-    public function peraturan()
-    {
-        return $this->hasMany(Peraturan::class, 'tag');
-    }
+    // public function peraturan()
+    // {
+    //     return $this->hasMany(Peraturan::class, 'tag');
+    // }
 }
