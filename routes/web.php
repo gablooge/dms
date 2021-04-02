@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\PeraturanController;
+use App\Http\Controllers\KategoriJenisDokumenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +16,11 @@ use App\Http\Controllers\PeraturanController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DokumenController::class, 'index']);
+Route::any('dokumen/list', [DokumenController::class, 'getDokumen'])->name('dokumen.list');
+
+Route::get('dokumen/kategori', [KategoriJenisDokumenController::class, 'index']);
+Route::any('dokumen/kategori/list', [KategoriJenisDokumenController::class, 'getKategori'])->name('kategori.list');
 
 // Route::resource('peraturan', PeraturanController::class);
 Route::get('peraturan', [PeraturanController::class, 'index']);

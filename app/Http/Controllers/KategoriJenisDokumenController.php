@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dokumen;
+use App\Models\KategoriJenisDokumen;
 use Illuminate\Http\Request;
 
 use DataTables;
 
-class DokumenController extends Controller
+class KategoriJenisDokumenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,25 +16,18 @@ class DokumenController extends Controller
      */
     public function index()
     {
-        
-        return view('dokumen.index');
+        return view('kategori.index');
     }
-
-    public function getDokumen(Request $request)
+    public function getKategori(Request $request)
     {
 
         if ($request->ajax()) {
-            $data = Dokumen::query();
+            $data = KategoriJenisDokumen::query();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('jenis', function (Dokumen $docs){
-                    return "-";
-                })
                 ->addColumn('action', function($row){
                     $actionBtn = '';
-                    if($row->file != "-"){
-                        $actionBtn = $actionBtn.'<button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></button>';
-                    }
+                    
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -42,7 +35,6 @@ class DokumenController extends Controller
             
         }
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -67,10 +59,10 @@ class DokumenController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Dokumen  $dokumen
+     * @param  \App\Models\KategoriJenisDokumen  $kategoriJenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function show(Dokumen $dokumen)
+    public function show(KategoriJenisDokumen $kategoriJenisDokumen)
     {
         //
     }
@@ -78,10 +70,10 @@ class DokumenController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Dokumen  $dokumen
+     * @param  \App\Models\KategoriJenisDokumen  $kategoriJenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function edit(Dokumen $dokumen)
+    public function edit(KategoriJenisDokumen $kategoriJenisDokumen)
     {
         //
     }
@@ -90,10 +82,10 @@ class DokumenController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Dokumen  $dokumen
+     * @param  \App\Models\KategoriJenisDokumen  $kategoriJenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dokumen $dokumen)
+    public function update(Request $request, KategoriJenisDokumen $kategoriJenisDokumen)
     {
         //
     }
@@ -101,10 +93,10 @@ class DokumenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Dokumen  $dokumen
+     * @param  \App\Models\KategoriJenisDokumen  $kategoriJenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dokumen $dokumen)
+    public function destroy(KategoriJenisDokumen $kategoriJenisDokumen)
     {
         //
     }

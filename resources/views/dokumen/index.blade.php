@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MASTER PERATURAN BAPENDA</title>
+    <title>DMS BAPENDA</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
     <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -13,6 +13,7 @@
             height: unset !important;
             background-color: darkseagreen;
             animation: pulse 2s infinite;
+            position: fixed;
         }
         @keyframes pulse {
             0% {
@@ -51,6 +52,19 @@
             background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
             -webkit-backface-visibility: hidden;
         }
+        #documentDatatableId_length select[name=documentDatatableId_length]{
+            width: 50px;
+        }
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+            display: none;
+        }
+        #documentDatatableId_filter input[type="search"] {
+            width: 178px;
+            transition: all .5s;
+        }
+        #documentDatatableId_filter input[type="search"]:focus {
+            width: 350px;
+        }
     </style>
 </head>
 <body>
@@ -61,11 +75,12 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>File</th>
                     <th>Jenis</th>
                     <th>Nomor</th>
                     <th>Tahun</th>
                     <th>Tag</th>
-                    <th>Perihal</th>
+                    <!--<th>Perihal</th>-->
                     <th></th>
                 </tr>
             </thead>
@@ -111,7 +126,7 @@
         serverSide: true,
         paging: true,
         ajax: {
-            'url':"{{ route('peraturans.list') }}",
+            'url':"{{ route('dokumen.list') }}",
             "type": "POST",
             'data': function (d) {
                 d._token = "{{ csrf_token() }}"
@@ -122,13 +137,15 @@
             {
                 "data": 'DT_RowIndex',
                 orderable: false, 
-                searchable: false
+                searchable: false,
+                "width": "35px"
             },
+            {data: 'file', name: 'file'},
             {data: 'jenis', name: 'jenis'},
             {data: 'nomor', name: 'nomor'},
             {data: 'tahun', name: 'tahun'},
             {data: 'tag', name: 'tag'},
-            {data: 'perihal', name: 'perihal'},
+            // {data: 'perihal', name: 'perihal'},
             {
                 data: 'action', 
                 name: 'action', 

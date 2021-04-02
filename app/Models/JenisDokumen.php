@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class JenisDokumen extends Model
 {
     use HasFactory;
+    protected $table = 'jenis_dokumen';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    public $timestamps = false;
+    
     protected $fillable = [
         'jenis_dokumen',
         'keterangan',

@@ -9,6 +9,11 @@ use App\Models\Dokumen;
 class KategoriJenisDokumen extends Model
 {
     use HasFactory;
+    protected $table = 'kategori_jenis_dokumen';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    public $timestamps = false;
+    
     protected $fillable = [
         'kategori_jenis_dokumen',
         'keterangan',
