@@ -5,6 +5,7 @@
 /vendor
 .env
 .env.bapenda
+.env.gcp
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml

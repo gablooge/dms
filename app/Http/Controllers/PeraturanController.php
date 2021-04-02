@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peraturan;
+use App\Models\Tag;
 
 use DataTables;
 
@@ -39,7 +40,10 @@ class PeraturanController extends Controller
                     return $peraturan->jenis_peraturan->keterangan;
                 })
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    $actionBtn = '';
+                    if($row->lamp != "-"){
+                        $actionBtn = $actionBtn.'<button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="'.$row->file.'" type="button" title="'.$row->lamp.'"><span><i class="fa fa-file-pdf-o"></i></span></button>';
+                    }
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
