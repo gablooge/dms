@@ -43,6 +43,7 @@ class KategoriJenisDokumenController extends Controller
     public function create()
     {
         //
+        return view('kategori.create');
     }
 
     /**
