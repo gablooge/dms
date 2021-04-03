@@ -41,6 +41,14 @@
             float: right;
             margin-left: 3px;
         }
+        .dt-btn-sm{
+            padding: 0px 5px !important;
+            font-size: 12px !important;
+            margin-bottom: 0px !important;
+        }
+        .pagination {
+            font-size: 12px;
+        }
     </style>
 @endsection
 

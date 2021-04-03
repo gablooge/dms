@@ -29,6 +29,7 @@ Route::any('dokumen/kategori/create', [KategoriJenisDokumenController::class, 'c
 Route::post('dokumen/kategori/store', [KategoriJenisDokumenController::class, 'store'])->name('kategori.store');
 Route::get('dokumen/kategori/{kategoriJenisDokumen}/edit/', [KategoriJenisDokumenController::class, 'edit'])->name('kategori.edit');
 Route::put('dokumen/kategori/{kategoriJenisDokumen}', [KategoriJenisDokumenController::class, 'update'])->name('kategori.update');
+Route::delete('dokumen/kategori/{kategoriJenisDokumen}', [KategoriJenisDokumenController::class, 'destroy'])->name('kategori.destroy');
 // END Kategori
 
 // Route::resource('peraturan', PeraturanController::class);
