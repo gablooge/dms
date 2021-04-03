@@ -5,7 +5,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
     <li class="breadcrumb-item"><a href="{{route('kategori.index')}}">Kategori</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Tambah</li>
+    <li class="breadcrumb-item active" aria-current="page">Edit</li>
   </ol>
 </nav>
 @stop
@@ -14,18 +14,19 @@
 <hr>
 <div class="card">
     <div class="card-header text-center font-weight-bold">
-        Tambah Kategori
+        Edit Kategori
     </div>
     <div class="card-body">
-        <form name="add-kategori-form" id="add-kategori-form" method="post" action="{{route('kategori.store')}}">
+        <form name="edit-kategori-form" id="edit-kategori-form" method="post" action="{{ route('kategori.update', $kategoriJenisDokumen->id) }}">
         @csrf
+        @method('PUT')
         <div class="form-group">
             <label for="nama_kategori">Nama Kategori</label>
-            <input type="text" id="nama_kategori" name="nama_kategori" class="form-control" required="" placeholder="Nama Kategori">
+            <input type="text" id="nama_kategori" name="nama_kategori" value="{{ $kategoriJenisDokumen->nama_kategori }}" class="form-control" required="" placeholder="Nama Kategori">
         </div>
         <div class="form-group">
             <label for="keterangan">Keterangan</label>
-            <input type="text" id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan">
+            <input type="text" id="keterangan" name="keterangan" value="{{ $kategoriJenisDokumen->keterangan }}" class="form-control" placeholder="Keterangan">
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
         <div class="float-right">

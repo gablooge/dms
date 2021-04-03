@@ -15,7 +15,7 @@ class KategoriJenisDokumen extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'kategori_jenis_dokumen',
+        'nama_kategori',
         'keterangan',
     ]; 
 

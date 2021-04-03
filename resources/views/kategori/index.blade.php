@@ -19,7 +19,7 @@ Kategori Jenis Dokumen
             serverSide: true,
             paging: true,
             ajax: {
-                'url':"{{ route('dokumen.list') }}",
+                'url':"{{ route('kategori.list') }}",
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}"
@@ -50,7 +50,7 @@ Kategori Jenis Dokumen
                 {
                     text: '<i class="fa fa-plus"></i>',
                     action: function ( e, dt, node, config ) {
-                        alert( 'Button activated' );
+                        location.href = "{{ route('kategori.create') }}"
                     }
                 }
             ]
@@ -61,6 +61,15 @@ Kategori Jenis Dokumen
     });
     </script>
 @endsection
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Beranda</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Kategori</li>
+  </ol>
+</nav>
+@stop
 
 @section('contents')
     @parent

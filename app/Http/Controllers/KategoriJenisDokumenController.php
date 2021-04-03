@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriJenisDokumen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use DataTables;
 
@@ -27,7 +28,7 @@ class KategoriJenisDokumenController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     $actionBtn = '';
-                    
+                    $actionBtn = $actionBtn.'<a class="btn btn-primary btn-sm" href="'.route('kategori.edit',$row->id).'">Edit</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -54,7 +55,21 @@ class KategoriJenisDokumenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_kategori' => ['required', 'max:200'],
+            'keterangan' => ['max:255'],
+        ]);
+ 
+        try{
+            // $kategori = new KategoriJenisDokumen;
+            // $kategori->nama_kategori = $request->nama_kategori;
+            // $kategori->keterangan = $request->keterangan;
+            // $kategori->save();
+            KategoriJenisDokumen::create($request->all());
+            return redirect()->route('kategori.index')->with('messages', 'Data Kategori telah disimpan');
+        }catch(\Exception $e){
+            return redirect()->route('kategori.create')->with('messages', 'Data Kategori gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 
     /**
@@ -76,7 +91,7 @@ class KategoriJenisDokumenController extends Controller
      */
     public function edit(KategoriJenisDokumen $kategoriJenisDokumen)
     {
-        //
+        return view('kategori.edit', compact('kategoriJenisDokumen'));
     }
 
     /**
@@ -88,7 +103,20 @@ class KategoriJenisDokumenController extends Controller
      */
     public function update(Request $request, KategoriJenisDokumen $kategoriJenisDokumen)
     {
-        //
+        $request->validate([
+            'nama_kategori' => ['required', 'max:200'],
+            'keterangan' => ['max:255'],
+        ]);
+        
+        try{
+            
+            $kategoriJenisDokumen->update($request->all());
+            
+            return redirect()->route('kategori.index')->with('messages', 'Data Kategori telah disimpan');
+        }catch(\Exception $e){
+            
+            return redirect()->route('kategori.edit', $kategoriJenisDokumen->id)->with('messages', 'Data Kategori gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 
     /**
@@ -100,5 +128,8 @@ class KategoriJenisDokumenController extends Controller
     public function destroy(KategoriJenisDokumen $kategoriJenisDokumen)
     {
         //
+        $kategoriJenisDokumen->delete();
+        return redirect()->route('kategori.index')
+                        ->with('success', 'Data kategori berhasil dihapus.');
     }
 }
