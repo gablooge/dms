@@ -1,7 +1,7 @@
 @extends('layouts.datatable')
 
 @section('title')
-Kategori Jenis Dokumen
+Jenis Dokumen
 @endsection
 
 @section('styles')
@@ -19,7 +19,7 @@ Kategori Jenis Dokumen
             serverSide: true,
             paging: true,
             ajax: {
-                'url':"{{ route('kategori.datatables') }}",
+                'url':"{{ route('jenis.datatables') }}",
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}"
@@ -32,7 +32,7 @@ Kategori Jenis Dokumen
                     searchable: false,
                     "width": "35px"
                 },
-                {data: 'nama_kategori', name: 'nama_kategori'},
+                {data: 'jenis_dokumen', name: 'jenis_dokumen'},
                 {data: 'keterangan', name: 'keterangan'},
                 {
                     data: 'action', 
@@ -50,7 +50,7 @@ Kategori Jenis Dokumen
                 {
                     text: '<i class="fa fa-plus"></i>',
                     action: function ( e, dt, node, config ) {
-                        location.href = "{{ route('kategori.create') }}"
+                        location.href = "{{ route('jenis.create') }}"
                     }
                 }
             ]
@@ -66,19 +66,19 @@ Kategori Jenis Dokumen
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Kategori</li>
+    <li class="breadcrumb-item active" aria-current="page">Jenis Dokumen</li>
   </ol>
 </nav>
 @stop
 
 @section('contents')
     @parent
-    <h2 class="mb-4">Kategori Dokumen</h2>
+    <h2 class="mb-4">Jenis Dokumen</h2>
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Kategori</th>
+                <th>Jenis Dokumen</th>
                 <th>Keterangan</th>
                 <th></th>
             </tr>

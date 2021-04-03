@@ -19,7 +19,13 @@ class KategoriJenisDokumenController extends Controller
     {
         return view('kategori.index');
     }
-    public function getKategori(Request $request)
+
+    /**
+     * Display a listing of the resource as json.
+     *
+     * @return Datatables
+     */
+    public function datatables(Request $request)
     {
 
         if ($request->ajax()) {
@@ -37,6 +43,7 @@ class KategoriJenisDokumenController extends Controller
             
         }
     }
+    
     /**
      * Show the form for creating a new resource.
      *

@@ -126,7 +126,7 @@
         serverSide: true,
         paging: true,
         ajax: {
-            'url':"{{ route('dokumen.list') }}",
+            'url':"{{ route('dokumen.datatables') }}",
             "type": "POST",
             'data': function (d) {
                 d._token = "{{ csrf_token() }}"
