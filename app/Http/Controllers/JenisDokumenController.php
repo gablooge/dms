@@ -70,8 +70,8 @@ class JenisDokumenController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $actionBtn = '<form action="'.route('kategori.destroy',$row->id).'" method="POST">';
-                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('kategori.edit',$row->id).'" title="Edit '.$row->nama_jenis.'"><span><i class="fa fa-edit"></i></span></a>';
+                    $actionBtn = '<form action="'.route('jenis.destroy',$row->id).'" method="POST">';
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('jenis.edit',$row->id).'" title="Edit '.$row->nama_jenis.'"><span><i class="fa fa-edit"></i></span></a>';
                     $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->nama_jenis.'"><span><i class="fa fa-trash"></i></span></a>';
                     return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
                 })
@@ -141,9 +141,11 @@ class JenisDokumenController extends Controller
      * @param  \App\Models\JenisDokumen  $jenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function edit(JenisDokumen $jenisDokumen)
+    public function edit(Request $request, JenisDokumen $jenisDokumen)
     {
-        //
+        $kategori_list = KategoriJenisDokumen::orderBy('id')->get();
+        
+        return view('jenis.edit', compact('jenisDokumen','kategori_list'));
     }
 
     /**
@@ -155,7 +157,18 @@ class JenisDokumenController extends Controller
      */
     public function update(Request $request, JenisDokumen $jenisDokumen)
     {
-        //
+        $request->validate([
+            'nama_jenis' => ['required', 'max:200'],
+            'keterangan' => ['max:255'],
+            'kategori_jenis_dokumen_id' => ['required'],
+        ]);
+        
+        try{
+            $jenisDokumen->update($request->all());
+            return redirect()->route('jenis.index', ["kategori" => $request->kategori_jenis_dokumen_id])->with('messages', 'Data Jenis Dokumen telah disimpan');
+        }catch(\Exception $e){
+            return redirect()->route('jenis.create', ["kategori" => $request->kategori_jenis_dokumen_id])->with('messages', 'Data Jenis Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 
     /**
@@ -166,6 +179,13 @@ class JenisDokumenController extends Controller
      */
     public function destroy(JenisDokumen $jenisDokumen)
     {
-        //
+        $kategori_id = $jenisDokumen->kategori_jenis_dokumen_id;
+        try{
+            $jenisDokumen->delete();
+            return redirect()->route('jenis.index', ["kategori" => $kategori_id])
+                        ->with('messages', 'Data kategori berhasil dihapus.');
+        }catch(\Exception $e){
+            return redirect()->route('jenis.index', ["kategori" => $kategori_id])->with('messages', 'Data Jenis gagal dihapus. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 }

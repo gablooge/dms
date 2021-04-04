@@ -35,9 +35,9 @@ Route::any('dokumen/jenis/datatables', [JenisDokumenController::class, 'datatabl
 Route::get('dokumen/jenis', [JenisDokumenController::class, 'index'])->name('jenis.index');
 Route::any('dokumen/jenis/create', [JenisDokumenController::class, 'create'])->name('jenis.create');
 Route::post('dokumen/jenis/store', [JenisDokumenController::class, 'store'])->name('jenis.store');
-Route::get('dokumen/jenis/{JenisDokumen}/edit/', [JenisDokumenController::class, 'edit'])->name('jenis.edit');
-Route::put('dokumen/jenis/{JenisDokumen}', [JenisDokumenController::class, 'update'])->name('jenis.update');
-Route::delete('dokumen/jenis/{JenisDokumen}', [JenisDokumenController::class, 'destroy'])->name('jenis.destroy');
+Route::get('dokumen/jenis/{jenisDokumen}/edit/', [JenisDokumenController::class, 'edit'])->name('jenis.edit');
+Route::put('dokumen/jenis/{jenisDokumen}', [JenisDokumenController::class, 'update'])->name('jenis.update');
+Route::delete('dokumen/jenis/{jenisDokumen}', [JenisDokumenController::class, 'destroy'])->name('jenis.destroy');
 // END Jenis
 
 // Route::resource('peraturan', PeraturanController::class);

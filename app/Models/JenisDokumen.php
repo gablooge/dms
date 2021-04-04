@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\KategoriJenisDokumen;
 
 class JenisDokumen extends Model
 {
@@ -18,4 +19,9 @@ class JenisDokumen extends Model
         'keterangan',
         'kategori_jenis_dokumen_id',
     ]; 
+
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriJenisDokumen::class, 'kategori_jenis_dokumen_id','id');
+    }
 }
