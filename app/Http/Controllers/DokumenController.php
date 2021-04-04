@@ -66,7 +66,23 @@ class DokumenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'tahun' => ['required'],
+            'nomor' => ['required', 'max:200'],
+        ]);
+          
+        try{
+            $fileName = time().' - '.$request->file->getClientOriginalName();
+            $request->file->move(public_path('medias'), $fileName);
+
+            $dokumen = Dokumen::create($request->all());
+            $dokumen->file = $fileName;
+            $dokumen->save();
+            return redirect()->route('dokumen.index')->with('messages', 'Data Tag telah disimpan');
+        }catch(\Exception $e){
+            return redirect()->route('dokumen.create')->with('messages', 'Data Tag gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 
     /**

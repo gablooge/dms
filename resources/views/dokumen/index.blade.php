@@ -37,6 +37,7 @@ Selamat Datang
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script type="text/javascript">
     $(function () {
+        Notiflix.Report.Init({ plainText: false });
         
         $.fn.select2.defaults.set( "theme", "bootstrap" );
         $('.select2').select2();
@@ -121,7 +122,7 @@ Selamat Datang
 @stop
 @section('contents')
     @parent
-    
+
     <h2 class="mb-4">DMS</h2>
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
