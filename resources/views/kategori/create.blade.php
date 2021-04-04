@@ -17,7 +17,7 @@
         Tambah Kategori
     </div>
     <div class="card-body">
-        <form name="add-kategori-form" id="add-kategori-form" method="post" action="{{route('kategori.store')}}">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="add-kategori-form" id="add-kategori-form" method="post" action="{{route('kategori.store')}}">
         @csrf
         <div class="form-group">
             <label for="nama_kategori">Nama Kategori</label>

@@ -37,7 +37,7 @@
         Edit Jenis Dokumen
     </div>
     <div class="card-body">
-    <form name="edit-jenis-form" id="edit-jenis-form" method="post" action="{{ route('jenis.update', $jenisDokumen->id) }}">
+    <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-jenis-form" id="edit-jenis-form" method="post" action="{{ route('jenis.update', $jenisDokumen->id) }}">
         @csrf
         @method('PUT')
         <div class="form-group">

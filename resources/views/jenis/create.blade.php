@@ -37,7 +37,7 @@
         Tambah Jenis Dokumen
     </div>
     <div class="card-body">
-        <form name="add-jenis-form" id="add-jenis-form" method="post" action="{{route('jenis.store')}}">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="add-jenis-form" id="add-jenis-form" method="post" action="{{route('jenis.store')}}">
         @csrf
         <div class="form-group">
             <label for="kategori_jenis_dokumen_id">Kategori</label>

@@ -17,7 +17,7 @@
         Edit Kategori
     </div>
     <div class="card-body">
-        <form name="edit-kategori-form" id="edit-kategori-form" method="post" action="{{ route('kategori.update', $kategoriJenisDokumen->id) }}">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-kategori-form" id="edit-kategori-form" method="post" action="{{ route('kategori.update', $kategoriJenisDokumen->id) }}">
         @csrf
         @method('PUT')
         <div class="form-group">

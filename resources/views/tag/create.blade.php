@@ -17,7 +17,7 @@
         Tambah Tag
     </div>
     <div class="card-body">
-        <form name="add-tag-form" id="add-tag-form" method="post" action="{{route('tag.store')}}">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="add-tag-form" id="add-tag-form" method="post" action="{{route('tag.store')}}">
         @csrf
         <div class="form-group">
             <label for="nama_tag">Nama Tag</label>

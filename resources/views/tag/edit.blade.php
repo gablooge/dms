@@ -17,7 +17,7 @@
         Edit Tag
     </div>
     <div class="card-body">
-        <form name="edit-tag-form" id="edit-tag-form" method="post" action="{{ route('tag.update', $tag->id) }}">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-tag-form" id="edit-tag-form" method="post" action="{{ route('tag.update', $tag->id) }}">
         @csrf
         @method('PUT')
         <div class="form-group">

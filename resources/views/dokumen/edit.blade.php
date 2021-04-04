@@ -165,8 +165,9 @@
         Edit {{ $dokumen->file }}
     </div>
     <div class="card-body">
-        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-dokumen-form" id="edit-dokumen-form" method="post" action="{{route('dokumen.store')}}" enctype="multipart/form-data">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-dokumen-form" id="edit-dokumen-form" method="post" action="{{ route('dokumen.update', $dokumen->id) }}" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="form-group">
             <label for="file">File</label>
             <div class="input-group">
