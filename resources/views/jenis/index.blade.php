@@ -108,11 +108,7 @@ Jenis Dokumen
   </ol>
 </nav>
 @stop
-
-@section('contents')
-    @parent
-    
-    <h2 class="mb-4 pull-left">Jenis Dokumen</h2>
+@section('additional-cog')
     <div class="pull-right">
         <select onchange="" class="form-control select2" id="kategori_jenis_dokumen_id" name="kategori_jenis_dokumen_id" required="">
             @foreach($kategori_list as $kategori)
@@ -120,6 +116,9 @@ Jenis Dokumen
             @endforeach
         </select>
     </div>
+@stop
+@section('contents')
+    @parent
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
             <tr>

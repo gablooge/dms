@@ -1,7 +1,7 @@
 @extends('layouts.datatable')
 
 @section('title')
-Kategori Jenis Dokumen
+Kategori Dokumen
 @endsection
 
 @section('styles')
@@ -80,7 +80,6 @@ Kategori Jenis Dokumen
 
 @section('contents')
     @parent
-    <h2 class="mb-4">Kategori Dokumen</h2>
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
             <tr>

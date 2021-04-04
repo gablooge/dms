@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@section('title')
+Dokumen
+@endsection
+
 @section('styles')
     @parent
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -152,7 +156,7 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-    <li class="breadcrumb-item"><a href="{{route('dokumen.index')}}">DMS</a></li>
+    <li class="breadcrumb-item"><a href="{{route('dokumen.index')}}">Dokumen</a></li>
     <li class="breadcrumb-item active" aria-current="page"> Edit </li>
   </ol>
 </nav>
@@ -161,51 +165,55 @@
 @section('contents')
 <hr>
 <div class="card">
-    <div class="card-header text-center font-weight-bold">
-        Edit {{ $dokumen->file }}
-    </div>
-    <div class="card-body">
-        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-dokumen-form" id="edit-dokumen-form" method="post" action="{{ route('dokumen.update', $dokumen->id) }}" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="file">File</label>
-            <div class="input-group">
-                <label class="input-group-btn">
-                    <span class="btn btn-info">
-                        Browse&hellip;<input id="file" class="form-control" name="file" accept="application/pdf" type="file" style="display: none;" multiple>
-                    </span>
-                </label>
-                <input id="fileinputlabelid" data-validate="true" name="FileName" data-title-pdf="Dokumen" type="text" class="form-control" value="{{ $dokumen->file }}" data-error="Pilih file PDF" data-required="true" readonly required>
-                <label id="preview" class="input-group-btn {{ ($dokumen->file) ? '' : 'd-none' }}">
-                    <span class="btn btn-secondary btn-pdf" data-toggle="modal" data-target="#previewpdf" title='View PDF'>
-                        <i class='fa fa-file-pdf-o' style='color: #fff'></i>
-                    </span>
-                    <span class="btn btn-danger" id="removeFile" title='Remove PDF' style="">
-                        <i class='fa fa-trash-o'></i>
-                    </span>
-                </label>
+<form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="edit-dokumen-form" id="edit-dokumen-form" method="post" action="{{ route('dokumen.update', $dokumen->id) }}" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+    <article class="card-group-item">
+        <div class="card-header text-center font-weight-bold">
+            Informasi Umum
+        </div>
+        <div class="card-body">
+            
+            <div class="form-group">
+                <label for="file">File</label>
+                <div class="input-group">
+                    <label class="input-group-btn">
+                        <span class="btn btn-info">
+                            Browse&hellip;<input id="file" class="form-control" name="file" accept="application/pdf" type="file" style="display: none;" multiple>
+                        </span>
+                    </label>
+                    <input id="fileinputlabelid" data-validate="true" name="FileName" data-title-pdf="Dokumen" type="text" class="form-control" value="{{ $dokumen->file }}" data-error="Pilih file PDF" data-required="true" readonly required>
+                    <label id="preview" class="input-group-btn {{ ($dokumen->file) ? '' : 'd-none' }}">
+                        <span class="btn btn-secondary btn-pdf" data-toggle="modal" data-target="#previewpdf" title='View PDF'>
+                            <i class='fa fa-file-pdf-o' style='color: #fff'></i>
+                        </span>
+                        <span class="btn btn-danger" id="removeFile" title='Remove PDF' style="">
+                            <i class='fa fa-trash-o'></i>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nomor">Nomor</label>
+                <input type="text" id="nomor" name="nomor" class="form-control" value="{{ $dokumen->nomor }}" placeholder="Nomor Dokumen"  required="">
+            </div>
+            <div class="form-group">
+                <label for="tahun">Tahun</label>
+                {!! Form::selectYear('tahun', 1945, now()->year, $dokumen->tahun, ['class' => 'form-control select2']) !!}
+            </div>
+            <div class="form-group">
+                <label for="perihal">Perihal</label>
+                <textarea class="form-control" id="perihal" name="perihal" rows="3">{{ $dokumen->perihal }}</textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <div class="float-right">
+                <a class="btn btn-secondary" href="{{ route('dokumen.index') }}"> Batal</a>
             </div>
         </div>
-        <div class="form-group">
-            <label for="nomor">Nomor</label>
-            <input type="text" id="nomor" name="nomor" class="form-control" value="{{ $dokumen->nomor }}" placeholder="Nomor Dokumen"  required="">
-        </div>
-        <div class="form-group">
-            <label for="tahun">Tahun</label>
-            {!! Form::selectYear('tahun', 1945, now()->year, $dokumen->tahun, ['class' => 'form-control select2']) !!}
-        </div>
-        <div class="form-group">
-            <label for="perihal">Perihal</label>
-            <textarea class="form-control" id="perihal" name="perihal" rows="3">{{ $dokumen->perihal }}</textarea>
-        </div>
-        
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <div class="float-right">
-            <a class="btn btn-secondary" href="{{ route('dokumen.index') }}"> Batal</a>
-        </div>
-        </form>
-    </div>
+    </article>
+
+</form>
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="previewpdf">

@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@section('title')
+Dokumen
+@endsection
+
 @section('styles')
     @parent
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -152,7 +156,7 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-    <li class="breadcrumb-item"><a href="{{route('dokumen.index')}}">DMS</a></li>
+    <li class="breadcrumb-item"><a href="{{route('dokumen.index')}}">Dokumen</a></li>
     <li class="breadcrumb-item active" aria-current="page">Tambah</li>
   </ol>
 </nav>
@@ -162,7 +166,7 @@
 <hr>
 <div class="card">
     <div class="card-header text-center font-weight-bold">
-        Tambah Dokumen
+        Informasi Umum
     </div>
     <div class="card-body">
         <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="add-dokumen-form" id="add-dokumen-form" method="post" action="{{route('dokumen.store')}}" enctype="multipart/form-data">

@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ asset('assets/notiflix/notiflix-2.7.0.min.css') }}" rel="stylesheet">
+    <style>
+        .card{
+            display: block;
+        }
+    </style>
     @yield('styles')
 
 </head>
@@ -36,7 +41,6 @@
                 <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="fa fa-cog"></span>
                 </a>
-
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="{{route('tag.index')}}">Tag</a>
                     <a class="dropdown-item" href="{{route('kategori.index')}}">Kategori Dokumen</a>
@@ -44,6 +48,15 @@
                 </div>
             </div>
         </div>
+        <div class="card border-dark">
+            <div class="card-header">
+                <h3 class="card-title" style="margin-bottom: 0;">@yield('title') @yield('additional-cog')</h3>
+            </div>
+            <div class="card-body collapse">
+            
+            </div>
+        </div>
+        <br />
         @yield('contents')
     </div>
 

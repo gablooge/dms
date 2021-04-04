@@ -1,7 +1,7 @@
 @extends('layouts.datatable')
 
 @section('title')
-Selamat Datang
+Dokumen
 @endsection
 
 @section('styles')
@@ -129,14 +129,13 @@ Selamat Datang
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-    <li class="breadcrumb-item active" aria-current="page">DMS</li>
+    <li class="breadcrumb-item active" aria-current="page">Dokumen</li>
   </ol>
 </nav>
 @stop
 @section('contents')
     @parent
-
-    <h2 class="mb-4">DMS</h2>
+    
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
             <tr>

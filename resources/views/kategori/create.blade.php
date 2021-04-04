@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@section('title')
+Kategori Dokumen
+@endsection
+
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">

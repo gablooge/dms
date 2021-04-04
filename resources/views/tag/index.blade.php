@@ -80,7 +80,6 @@ Tag
 
 @section('contents')
     @parent
-    <h2 class="mb-4">Tag</h2>
     <table id="documentDatatableId" class="table table-bordered yajra-datatable">
         <thead>
             <tr>
