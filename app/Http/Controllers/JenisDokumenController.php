@@ -70,7 +70,7 @@ class JenisDokumenController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $actionBtn = '<form action="'.route('jenis.destroy',$row->id).'" method="POST">';
+                    $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('jenis.destroy',$row->id).'" method="POST">';
                     $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('jenis.edit',$row->id).'" title="Edit '.$row->nama_jenis.'"><span><i class="fa fa-edit"></i></span></a>';
                     $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->nama_jenis.'"><span><i class="fa fa-trash"></i></span></a>';
                     return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';

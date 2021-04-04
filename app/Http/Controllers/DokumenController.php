@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Dokumen;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 use DataTables;
+use File;
 
 class DokumenController extends Controller
 {
@@ -36,12 +37,12 @@ class DokumenController extends Controller
                 //     return "-";
                 // })
                 ->addColumn('action', function($row){
-                    $actionBtn = '<form action="'.route('kategori.destroy',$row->id).'" method="POST">';
+                    $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';
                     if($row->file != "-"){
                         $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
                     }
                     $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$row->id).'" title="Edit '.$row->file.'"><span><i class="fa fa-edit"></i></span></a>';
-                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->nama_kategori.'"><span><i class="fa fa-trash"></i></span></a>';
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->file.'"><span><i class="fa fa-trash"></i></span></a>';
                     return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
                 })
                 ->rawColumns(['action'])
@@ -77,13 +78,12 @@ class DokumenController extends Controller
         try{
             $fileName = time().' - '.$request->file->getClientOriginalName();
             $request->file->move(public_path('medias'), $fileName);
-
             $dokumen = Dokumen::create($request->all());
             $dokumen->file = $fileName;
             $dokumen->save();
-            return redirect()->route('dokumen.index')->with('messages', 'Data Tag telah disimpan');
+            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.create')->with('messages', 'Data Tag gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+            return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
         }
     }
 
@@ -118,7 +118,34 @@ class DokumenController extends Controller
      */
     public function update(Request $request, Dokumen $dokumen)
     {
-        //
+        $request->validate([
+            'tahun' => ['required'],
+            'nomor' => ['required', 'max:200'],
+        ]);
+        
+        try{
+            
+            if($request->hasFile('file')){
+                $local_media_file = public_path('medias/'.$dokumen->file);
+                if(File::exists($local_media_file)){
+                    File::delete($local_media_file);
+                }
+                $request->validate([
+                  'file' => 'required|file|mimes:jpg,jpeg,bmp,png,pdf',
+                ]);
+                $fileName = time().' - '.$request->file->getClientOriginalName();
+                $request->file->move(public_path('medias'), $fileName);
+                $dokumen->file = $fileName;
+            }
+            $dokumen->tahun = $request->tahun;
+            $dokumen->nomor = $request->nomor;
+            $dokumen->perihal = $request->perihal;
+            $dokumen->save();
+            
+            return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
+        }catch(\Exception $e){
+            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 
     /**
@@ -129,6 +156,16 @@ class DokumenController extends Controller
      */
     public function destroy(Dokumen $dokumen)
     {
-        //
+        try{
+            $local_media_file = public_path('medias/'.$dokumen->file);
+            if(File::exists($local_media_file)){
+                File::delete($local_media_file);
+            }
+            $dokumen->delete();
+            return redirect()->route('dokumen.index')
+                        ->with('messages', 'Data dokumen berhasil dihapus.');
+        }catch(\Exception $e){
+            return redirect()->route('dokumen.index')->with('messages', 'Data dokumen gagal dihapus. Error: <br />'.Str::limit($e->getMessage(), 150));
+        }
     }
 }

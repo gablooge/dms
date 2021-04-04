@@ -30,7 +30,9 @@
                 </ul>
             </div>
         @endif
-        @yield('breadcrumb')
+        <nav aria-label="navbar">
+            @yield('breadcrumb')
+        </nav>
         @yield('contents')
     </div>
 
