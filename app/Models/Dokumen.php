@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\KategoriJenisDokumen;
+use App\Models\Tag;
 
 class Dokumen extends Model
 {
@@ -22,7 +23,15 @@ class Dokumen extends Model
         'file',
     ];    
 
-    public function kategori()
+    public function tags_list()
+    {
+        return $this->belongsToMany(Tag::class,
+            'tag_dokumen',
+            'dokumen_id',
+            'tag_id');
+    }
+
+    public function kategori_list()
     {
         return $this->belongsToMany(KategoriJenisDokumen::class,
             'kategori_dokumen',

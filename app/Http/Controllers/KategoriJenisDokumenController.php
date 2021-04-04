@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KategoriJenisDokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 use DataTables;
 
@@ -112,7 +113,7 @@ class KategoriJenisDokumenController extends Controller
     public function update(Request $request, KategoriJenisDokumen $kategoriJenisDokumen)
     {
         $request->validate([
-            'nama_kategori' => ['required', 'unique:kategori_jenis_dokumen', 'max:200'],
+            'nama_kategori' => ['required', Rule::unique('kategori_jenis_dokumen')->ignore($kategoriJenisDokumen->id), 'max:200'],
             'keterangan' => ['max:255'],
         ]);
         

@@ -5,6 +5,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\KategoriJenisDokumenController;
 use App\Http\Controllers\JenisDokumenController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,16 @@ Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index'
 Route::any('dokumen/datatables', [DokumenController::class, 'datatables'])->name('dokumen.datatables');
 Route::any('dokumen/create', [DokumenController::class, 'create'])->name('dokumen.create');
 Route::post('dokumen/store', [DokumenController::class, 'store'])->name('dokumen.store');
+
+// Tag 
+Route::any('dokumen/tag/datatables', [TagController::class, 'datatables'])->name('tag.datatables');
+Route::get('dokumen/tag', [TagController::class, 'index'])->name('tag.index');
+Route::any('dokumen/tag/create', [TagController::class, 'create'])->name('tag.create');
+Route::post('dokumen/tag/store', [TagController::class, 'store'])->name('tag.store');
+Route::get('dokumen/tag/{tag}/edit/', [TagController::class, 'edit'])->name('tag.edit');
+Route::put('dokumen/tag/{tag}', [TagController::class, 'update'])->name('tag.update');
+Route::delete('dokumen/tag/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');
+// END Tag
 
 // Kategori 
 Route::any('dokumen/kategori/datatables', [KategoriJenisDokumenController::class, 'datatables'])->name('kategori.datatables');
