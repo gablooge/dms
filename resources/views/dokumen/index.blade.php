@@ -98,7 +98,7 @@ Selamat Datang
                     orderable: false, 
                     searchable: false,
                     className: "action",
-                    "width": 45
+                    "width": 70
                 },
             ]
         });

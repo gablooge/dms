@@ -23,6 +23,14 @@ class Dokumen extends Model
         'file',
     ];    
 
+    public function getFileAttribute($value)
+    {
+        if(is_null($value) || empty($value)){
+            return "-";
+        }
+        return $value;
+    }
+
     public function tags_list()
     {
         return $this->belongsToMany(Tag::class,

@@ -18,11 +18,16 @@ use App\Http\Controllers\TagController;
 |
 */
 
+// Dokumen
 Route::get('/', [DokumenController::class, 'index']);
 Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
 Route::any('dokumen/datatables', [DokumenController::class, 'datatables'])->name('dokumen.datatables');
 Route::any('dokumen/create', [DokumenController::class, 'create'])->name('dokumen.create');
 Route::post('dokumen/store', [DokumenController::class, 'store'])->name('dokumen.store');
+Route::get('dokumen/{dokumen}/edit/', [DokumenController::class, 'edit'])->name('dokumen.edit');
+Route::put('dokumen/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
+Route::delete('dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+// END Dokumen
 
 // Tag 
 Route::any('dokumen/tag/datatables', [TagController::class, 'datatables'])->name('tag.datatables');

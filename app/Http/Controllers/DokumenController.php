@@ -36,11 +36,13 @@ class DokumenController extends Controller
                 //     return "-";
                 // })
                 ->addColumn('action', function($row){
-                    $actionBtn = '';
+                    $actionBtn = '<form action="'.route('kategori.destroy',$row->id).'" method="POST">';
                     if($row->file != "-"){
-                        $actionBtn = $actionBtn.'<button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></button>';
+                        $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
                     }
-                    return $actionBtn;
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$row->id).'" title="Edit '.$row->file.'"><span><i class="fa fa-edit"></i></span></a>';
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->nama_kategori.'"><span><i class="fa fa-trash"></i></span></a>';
+                    return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -104,7 +106,7 @@ class DokumenController extends Controller
      */
     public function edit(Dokumen $dokumen)
     {
-        //
+        return view('dokumen.edit', compact('dokumen'));
     }
 
     /**
