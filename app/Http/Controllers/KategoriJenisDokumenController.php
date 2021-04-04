@@ -43,7 +43,7 @@ class KategoriJenisDokumenController extends Controller
             
         }
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -64,7 +64,7 @@ class KategoriJenisDokumenController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kategori' => ['required', 'max:200'],
+            'nama_kategori' => ['required', 'unique:kategori_jenis_dokumen', 'max:200'],
             'keterangan' => ['max:255'],
         ]);
  
@@ -112,7 +112,7 @@ class KategoriJenisDokumenController extends Controller
     public function update(Request $request, KategoriJenisDokumen $kategoriJenisDokumen)
     {
         $request->validate([
-            'nama_kategori' => ['required', 'max:200'],
+            'nama_kategori' => ['required', 'unique:kategori_jenis_dokumen', 'max:200'],
             'keterangan' => ['max:255'],
         ]);
         

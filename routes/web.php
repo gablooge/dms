@@ -18,7 +18,10 @@ use App\Http\Controllers\JenisDokumenController;
 */
 
 Route::get('/', [DokumenController::class, 'index']);
+Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
 Route::any('dokumen/datatables', [DokumenController::class, 'datatables'])->name('dokumen.datatables');
+Route::any('dokumen/create', [DokumenController::class, 'create'])->name('dokumen.create');
+Route::post('dokumen/store', [DokumenController::class, 'store'])->name('dokumen.store');
 
 // Kategori 
 Route::any('dokumen/kategori/datatables', [KategoriJenisDokumenController::class, 'datatables'])->name('kategori.datatables');
