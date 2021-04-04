@@ -23,6 +23,7 @@ Tag
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}"
+                    Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 }
             },
             columns: [
@@ -30,7 +31,8 @@ Tag
                     "data": 'DT_RowIndex',
                     orderable: false, 
                     searchable: false,
-                    "width": "35px"
+                    "className": "text-center",
+                    "width": 25
                 },
                 {data: 'nama_tag', name: 'nama_tag'},
                 {data: 'keterangan', name: 'keterangan'},
@@ -39,11 +41,16 @@ Tag
                     name: 'action', 
                     orderable: false, 
                     searchable: false,
-                    className: "action"
+                    className: "action",
+                    "width": 45
                 },
             ]
         });
-        
+        table.on('processing.dt', function (e, settings, processing) {
+            if (!processing) {
+                Notiflix.Block.Remove('.yajra-datatable');
+            }
+        });
         new $.fn.dataTable.Buttons(table, {
             "buttons":
             [

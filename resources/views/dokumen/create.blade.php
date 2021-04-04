@@ -165,7 +165,7 @@
         Tambah Dokumen
     </div>
     <div class="card-body">
-        <form name="add-dokumen-form" id="add-dokumen-form" method="post" action="{{route('dokumen.store')}}" enctype="multipart/form-data">
+        <form onsubmit="Notiflix.Loading.Dots('Uploading...');" name="add-dokumen-form" id="add-dokumen-form" method="post" action="{{route('dokumen.store')}}" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="file">File</label>

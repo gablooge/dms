@@ -38,7 +38,7 @@ Selamat Datang
     <script type="text/javascript">
     $(function () {
         Notiflix.Report.Init({ plainText: false });
-        
+
         $.fn.select2.defaults.set( "theme", "bootstrap" );
         $('.select2').select2();
 
@@ -60,7 +60,9 @@ Selamat Datang
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
                     // d.kategori_id = $("#kategori_jenis_dokumen_id").val();
-                }
+                    Notiflix.Block.Circle('.yajra-datatable','Loading...');
+                },
+                
             },
             "stateSaveParams": function (settings, data) {
                 //save state
@@ -77,24 +79,35 @@ Selamat Datang
                     "data": 'DT_RowIndex',
                     orderable: false, 
                     searchable: false,
-                    "width": "35px"
+                    "className": "text-center",
+                    "width": 25
                 },
                 {data: 'file', name: 'file'},
-                {data: 'jenis', name: 'jenis'},
+                // {data: 'jenis', name: 'jenis'},
                 {data: 'nomor', name: 'nomor'},
-                {data: 'tahun', name: 'tahun'},
-                {data: 'tag', name: 'tag'},
-                // {data: 'perihal', name: 'perihal'},
+                {
+                    data: 'tahun', 
+                    name: 'tahun',
+                    "className": "text-center"
+                },
+                // {data: 'tag', name: 'tag'},
+                {data: 'perihal', name: 'perihal'},
                 {
                     data: 'action', 
                     name: 'action', 
                     orderable: false, 
                     searchable: false,
-                    className: "action"
+                    className: "action",
+                    "width": 45
                 },
             ]
         });
         
+        table.on('processing.dt', function (e, settings, processing) {
+            if (!processing) {
+                Notiflix.Block.Remove('.yajra-datatable');
+            }
+        });
         new $.fn.dataTable.Buttons(table, {
             "buttons":
             [
@@ -129,11 +142,11 @@ Selamat Datang
             <tr>
                 <th>No</th>
                 <th>File</th>
-                <th>Jenis</th>
+                <!-- <th>Jenis</th> -->
                 <th>Nomor</th>
                 <th>Tahun</th>
-                <th>Tag</th>
-                <!--<th>Perihal</th>-->
+                <!-- <th>Tag</th> -->
+                <th>Perihal</th>
                 <th></th>
             </tr>
         </thead>

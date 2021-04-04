@@ -8,10 +8,11 @@
     
     <style>
         div.dataTables_wrapper div.dataTables_processing {
-            height: unset !important;
+            /* height: unset !important;
             background-color: darkseagreen;
             animation: pulse 2s infinite;
-            position: fixed;
+            position: fixed; */
+            display: none !important;
         }
                 
         button.dt-button {

@@ -27,6 +27,7 @@ Jenis Dokumen
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
                     d.kategori_id = $("#kategori_jenis_dokumen_id").val();
+                    Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 }
             },
             "stateSaveParams": function (settings, data) {
@@ -44,7 +45,8 @@ Jenis Dokumen
                     "data": 'DT_RowIndex',
                     orderable: false, 
                     searchable: false,
-                    "width": "35px"
+                    "className": "text-center",
+                    "width": 25
                 },
                 {data: 'nama_jenis', name: 'nama_jenis'},
                 {data: 'keterangan', name: 'keterangan'},
@@ -53,11 +55,16 @@ Jenis Dokumen
                     name: 'action', 
                     orderable: false, 
                     searchable: false,
-                    className: "action"
+                    className: "action",
+                    "width": 45
                 },
             ]
         });
-        
+        table.on('processing.dt', function (e, settings, processing) {
+            if (!processing) {
+                Notiflix.Block.Remove('.yajra-datatable');
+            }
+        });
         new $.fn.dataTable.Buttons(table, {
             "buttons":
             [

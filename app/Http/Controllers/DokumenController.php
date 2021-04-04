@@ -32,13 +32,13 @@ class DokumenController extends Controller
             $data = Dokumen::query();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('jenis', function (Dokumen $docs){
-                    return "-";
-                })
+                // ->addColumn('jenis', function (Dokumen $docs){
+                //     return "-";
+                // })
                 ->addColumn('action', function($row){
                     $actionBtn = '';
                     if($row->file != "-"){
-                        $actionBtn = $actionBtn.'<button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></button>';
+                        $actionBtn = $actionBtn.'<button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></button>';
                     }
                     return $actionBtn;
                 })
