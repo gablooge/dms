@@ -30,14 +30,26 @@
                 </ul>
             </div>
         @endif
-        <nav aria-label="navbar">
+        <div id="navbar">
             @yield('breadcrumb')
-        </nav>
+            <div id="menu-atas" class="dropleft show pull-right" style="top: -55px; right: 10px;">
+                <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="fa fa-cog"></span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{route('tag.index')}}">Tag</a>
+                    <a class="dropdown-item" href="{{route('kategori.index')}}">Kategori Dokumen</a>
+                    <a class="dropdown-item" href="{{route('jenis.index')}}">Jenis Dokumen</a>
+                </div>
+            </div>
+        </div>
         @yield('contents')
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="{{ asset('assets/notiflix/notiflix-2.7.0.min.js') }}"></script>
     @yield('scripts')
