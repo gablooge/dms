@@ -6,6 +6,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 use DataTables;
 
@@ -19,6 +20,17 @@ class TagController extends Controller
     public function index()
     {
         return view('tag.index');
+    }
+
+    /**
+     * Display a listing of the resource as json.
+     *
+     * @return Json
+     */
+    public function select2(Request $request)
+    {
+        $data = DB::table('tag')->where('nama_tag', 'LIKE', '%'.$request->q.'%')->select(DB::raw('nama_tag as id'), DB::raw('nama_tag as text'))->get();
+        return response()->json($data);
     }
 
     /**

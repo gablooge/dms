@@ -9,7 +9,7 @@ class Tag extends Model
 {
     use HasFactory;
     protected $table = 'tag';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'nama_tag';
     public $incrementing = true;
     public $timestamps = false;
     
@@ -17,6 +17,11 @@ class Tag extends Model
         'nama_tag',
         'keterangan',
     ]; 
+
+    public function getTextAttribute()
+    {
+        return $this->nama_tag;
+    }
 
     public function dokumen()
     {

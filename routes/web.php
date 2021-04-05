@@ -30,6 +30,7 @@ Route::delete('dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name(
 // END Dokumen
 
 // Tag 
+Route::any('dokumen/tag/select2', [TagController::class, 'select2'])->name('tag.select2');
 Route::any('dokumen/tag/datatables', [TagController::class, 'datatables'])->name('tag.datatables');
 Route::get('dokumen/tag', [TagController::class, 'index'])->name('tag.index');
 Route::any('dokumen/tag/create', [TagController::class, 'create'])->name('tag.create');

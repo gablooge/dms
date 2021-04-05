@@ -75,7 +75,8 @@ Dokumen
 
         $.fn.select2.defaults.set( "theme", "bootstrap" );
         $('.select2').select2();
-
+        
+        // File 
         $("#removeFile").on("click", function () {
             $("#fileinputlabelid").val("");
             $("#file").val("");
@@ -149,6 +150,39 @@ Dokumen
                 // modalpdf.find("h4.modal-title").html(filename.val());
             }
         });
+        // END File
+
+        $('#tag_list').select2({
+            tags: true,
+            tokenSeparators: [','],
+            ajax: {
+                url: '{{route('tag.select2')}}',
+                dataType: 'json',
+                processResults: function(data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            // Some nice improvements:
+            // max tags is 3
+            maximumSelectionLength: 10,
+            // add "(new tag)" for new tags
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if (term === '') {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term + ' (new tag)'
+                };
+            },
+        });
+
     });
     </script>
 @endsection
@@ -170,7 +204,7 @@ Dokumen
             @method('PUT')
     <article class="card-group-item">
         <div class="card-header text-center font-weight-bold">
-            Informasi Umum
+            Edit Dokumen
         </div>
         <div class="card-body">
             
@@ -205,17 +239,34 @@ Dokumen
                 <label for="perihal">Perihal</label>
                 <textarea class="form-control" id="perihal" name="perihal" rows="3">{{ $dokumen->perihal }}</textarea>
             </div>
-            
+            <div class="form-group">
+                <label for="tag_list">Tag</label>
+                <select multiple="multiple" class="form-control" id="tag_list" name="tag_list">
+                    <option value=""></option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
             <div class="float-right">
                 <a class="btn btn-secondary" href="{{ route('dokumen.index') }}"> Batal</a>
             </div>
         </div>
     </article>
+    <!-- <article class="card-group-item">
+        <div class="card-header text-center font-weight-bold">
+            Tag
+        </div>
+        <div class="card-body">
 
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <div class="float-right">
+                <a class="btn btn-secondary" href="{{ route('dokumen.index') }}"> Batal</a>
+            </div>
+        </div>
+    </article> -->
 </form>
 </div>
-
+<br />
+<br />
 <div class="modal fade" tabindex="-1" role="dialog" id="previewpdf">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
