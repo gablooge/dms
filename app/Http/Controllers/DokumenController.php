@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokumen;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
@@ -124,7 +125,7 @@ class DokumenController extends Controller
         ]);
         
         try{
-            
+            // main information
             if($request->hasFile('file')){
                 $local_media_file = public_path('medias/'.$dokumen->file);
                 if(File::exists($local_media_file)){
@@ -141,10 +142,20 @@ class DokumenController extends Controller
             $dokumen->nomor = $request->nomor;
             $dokumen->perihal = $request->perihal;
             $dokumen->save();
+            // other information
+            if ($request->has('tag_list')) {
+                foreach($request->tag_list as $tagName){
+                    $tag = Tag::firstOrNew(['nama_tag' => strtoupper($tagName)]);
+                    $tag->keterangan = $tagName;
+                    $tag->save();
+                }            
+            }
+            $tags = Tag::whereIn('nama_tag', $request->tag_list)->get()->pluck('id')->get();
+            // $dokumen->tags_list()->sync($tags);
             
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 500));
         }
     }
 

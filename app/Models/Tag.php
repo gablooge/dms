@@ -9,7 +9,7 @@ class Tag extends Model
 {
     use HasFactory;
     protected $table = 'tag';
-    protected $primaryKey = 'nama_tag';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;
     

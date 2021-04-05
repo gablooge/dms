@@ -155,6 +155,7 @@ Dokumen
         $('#tag_list').select2({
             tags: true,
             tokenSeparators: [','],
+            minimumInputLength: 2,
             ajax: {
                 url: '{{route('tag.select2')}}',
                 dataType: 'json',
@@ -241,7 +242,7 @@ Dokumen
             </div>
             <div class="form-group">
                 <label for="tag_list">Tag</label>
-                <select multiple="multiple" class="form-control" id="tag_list" name="tag_list">
+                <select multiple="multiple" class="form-control" id="tag_list" name="tag_list[]">
                     <option value=""></option>
                 </select>
             </div>
