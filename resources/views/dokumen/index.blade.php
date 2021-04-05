@@ -90,7 +90,7 @@ Dokumen
                     name: 'tahun',
                     "className": "text-center"
                 },
-                // {data: 'tag', name: 'tag'},
+                {data: 'tags', name: 'tags'},
                 {data: 'perihal', name: 'perihal'},
                 {
                     data: 'action', 
@@ -141,10 +141,9 @@ Dokumen
             <tr>
                 <th>No</th>
                 <th>File</th>
-                <!-- <th>Jenis</th> -->
                 <th>Nomor</th>
                 <th>Tahun</th>
-                <!-- <th>Tag</th> -->
+                <th>Tag</th>
                 <th>Perihal</th>
                 <th></th>
             </tr>

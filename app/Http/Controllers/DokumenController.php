@@ -34,8 +34,8 @@ class DokumenController extends Controller
             $data = Dokumen::query();
             return Datatables::of($data)
                 ->addIndexColumn()
-                // ->addColumn('jenis', function (Dokumen $docs){
-                //     return "-";
+                // ->addColumn('Tags', function (Dokumen $docs){
+                //     return join(",", $docs->tags_list()->pluck("nama_tag")->toArray());
                 // })
                 ->addColumn('action', function($row){
                     $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';
@@ -143,19 +143,24 @@ class DokumenController extends Controller
             $dokumen->perihal = $request->perihal;
             $dokumen->save();
             // other information
+            // Tags 
+            $dokumen->tags_list()->detach();
             if ($request->has('tag_list')) {
                 foreach($request->tag_list as $tagName){
                     $tag = Tag::firstOrNew(['nama_tag' => strtoupper($tagName)]);
                     $tag->keterangan = $tagName;
                     $tag->save();
-                }            
+                }
+                $tags = Tag::whereIn('nama_tag', $request->tag_list)->orderBy('nama_tag', 'ASC')->pluck('id');
+                $dokumen->tags_list()->sync($tags);
+                $dokumen->tags = join(",", $request->tag_list); 
+                $dokumen->save();  
             }
-            $tags = Tag::whereIn('nama_tag', $request->tag_list)->get()->pluck('id')->get();
-            // $dokumen->tags_list()->sync($tags);
-            
+
+
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 500));
+            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
         }
     }
 

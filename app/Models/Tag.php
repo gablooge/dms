@@ -23,11 +23,8 @@ class Tag extends Model
         return $this->nama_tag;
     }
 
-    public function dokumen()
+    public function dokumen_list()
     {
-        return $this->belongsToMany(Dokumen::class,
-            'tag_dokumen',
-            'tag_id',
-            'dokumen_id');
+        return $this->belongsToMany(Dokumen::class,'tag_dokumen');
     }
 }

@@ -33,10 +33,7 @@ class Dokumen extends Model
 
     public function tags_list()
     {
-        return $this->belongsToMany(Tag::class,
-            'tag_dokumen',
-            'dokumen_id',
-            'tag_id');
+        return $this->belongsToMany(Tag::class, 'tag_dokumen');
     }
 
     public function kategori_list()

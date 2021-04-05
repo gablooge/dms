@@ -243,7 +243,9 @@ Dokumen
             <div class="form-group">
                 <label for="tag_list">Tag</label>
                 <select multiple="multiple" class="form-control" id="tag_list" name="tag_list[]">
-                    <option value=""></option>
+                    @foreach($dokumen->tags_list as $tag)
+                        <option value="{{ $tag->nama_tag }}" selected>{{ $tag->nama_tag }}</option>
+                    @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
