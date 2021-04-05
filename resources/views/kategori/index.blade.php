@@ -56,6 +56,7 @@ Kategori Dokumen
             [
                 {
                     text: '<i class="fa fa-plus"></i>',
+                    titleAttr: 'Tambah Kategori Dokumen',
                     action: function ( e, dt, node, config ) {
                         location.href = "{{ route('kategori.create') }}"
                     }

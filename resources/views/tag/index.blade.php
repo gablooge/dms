@@ -56,6 +56,7 @@ Tag
             [
                 {
                     text: '<i class="fa fa-plus"></i>',
+                    titleAttr: 'Tambah Tag',
                     action: function ( e, dt, node, config ) {
                         location.href = "{{ route('tag.create') }}"
                     }

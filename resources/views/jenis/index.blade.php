@@ -70,6 +70,7 @@ Jenis Dokumen
             [
                 {
                     text: '<i class="fa fa-plus"></i>',
+                    titleAttr: 'Tambah Jenis Dokumen',
                     action: function ( e, dt, node, config ) {
                         location.href = "{{ route('jenis.create') }}?kategori="+$('#kategori_jenis_dokumen_id').val();
                     }
