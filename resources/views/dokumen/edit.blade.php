@@ -157,7 +157,7 @@ Dokumen
             tokenSeparators: [','],
             minimumInputLength: 2,
             ajax: {
-                url: '{{route('tag.select2')}}',
+                url: '{{route('tag.select')}}',
                 dataType: 'json',
                 processResults: function(data) {
                     return {

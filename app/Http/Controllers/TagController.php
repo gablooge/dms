@@ -28,7 +28,7 @@ class TagController extends Controller
      *
      * @return Json
      */
-    public function select2(Request $request)
+    public function select(Request $request)
     {
         if(is_null($request->q) || empty($request->q)){
             return response()->json([]);
@@ -36,7 +36,7 @@ class TagController extends Controller
         $data = DB::table('tag')->where(DB::raw('lower(nama_tag)'), 'LIKE', '%'.strtolower($request->q).'%')->select(DB::raw('nama_tag as id'), DB::raw('nama_tag as text'))->get();
         return response()->json($data);
     }
-
+    
     /**
      * Display a listing of the resource as json.
      *

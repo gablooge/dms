@@ -48,12 +48,12 @@
                 </div>
             </div>
         </div>
-        <div class="card border-dark">
+        <div id="title-card-id" class="card border-dark">
             <div class="card-header">
                 <h3 class="card-title" style="margin-bottom: 0;">@yield('title') @yield('additional-cog')</h3>
             </div>
             <div class="card-body collapse">
-            
+                @yield('additional-content-filters')
             </div>
         </div>
         <br />

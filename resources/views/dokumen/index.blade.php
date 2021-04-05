@@ -6,9 +6,9 @@ Dokumen
 
 @section('styles')
     @parent
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" />
     <style>
+        /** PDF Box */
         @keyframes placeHolderShimmer {
           0% {
             background-position: 0px 0;
@@ -29,18 +29,63 @@ Dokumen
             background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
             -webkit-backface-visibility: hidden;
         }
+        
+        /** loading input **/
+        .icon-container {
+            position: absolute;
+            right: 10px;
+            top: calc(50% - 10px);
+        }
+        .loader {
+            position: relative;
+            height: 20px;
+            width: 20px;
+            display: inline-block;
+            animation: around 5.4s infinite;
+        }
+
+        @keyframes around {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+            }
+        }
+
+        .loader::after, .loader::before {
+            content: "";
+            background: white;
+            position: absolute;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            border-width: 2px;
+            border-color: #333 #333 transparent transparent;
+            border-style: solid;
+            border-radius: 20px;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            animation: around 0.7s ease-in-out infinite;
+        }
+
+        .loader::after {
+            animation: around 0.7s ease-in-out 0.1s infinite;
+            background: transparent;
+        }
+        /** end loading input **/
     </style>
 @endsection
 
 @section('scripts')
     @parent
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha512-rMGGF4wg1R73ehtnxXBt5mbUfN9JUJwbk21KMlnLZDJh7BkPmeovBuddZCENJddHYYMkCh9hPFnPmS9sspki8g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.proto.min.js" integrity="sha512-jVHjpoNvP6ZKjpsZxTFVEDexeLNdWtBLVcbc7y3fNPLHnldVylGNRFYOc7uc+pfS+8W6Vo2DDdCHdDG/Uv460Q==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript">
     $(function () {
         Notiflix.Report.Init({ plainText: false });
-
-        $.fn.select2.defaults.set( "theme", "bootstrap" );
-        $('.select2').select2();
 
         $('#documentDatatableId').on('click', '.buttons-pdf', function () {
             var modalpdf = $('#largeModalId');
@@ -117,11 +162,61 @@ Dokumen
                     action: function ( e, dt, node, config ) {
                         location.href = "{{ route('dokumen.create') }}";
                     }
+                },{
+                    text: '<i class="fa fa-filter"></i>',
+                    titleAttr: 'Filter Lanjutan',
+                    action: function ( e, dt, node, config ) {
+                        $("#title-card-id .card-body").collapse('toggle');
+                    }
                 }
             ]
         });
 
         table.buttons(0, null).container().appendTo($('#documentDatatableId_filter'));
+
+        $("#tag_list").chosen({
+            width: "200px"
+        }); 
+        $('#tag_list').on('chosen:ready', function(evt, params) {
+            $("#tag_list_chosen").css("min-width","200px");
+            $("#tag_list_chosen").css("width","auto");
+        });
+        var counter = 0;
+        $('#filter-panel-form-id .chosen-search-input').autocomplete({
+            source: function( request, response ) {
+                if(request.term.length>1){
+                    
+                    $.ajax({
+                        url: "{{route('tag.select')}}",
+                        data: {
+                            q: request.term
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            counter++;
+                            $(".icon-container i").addClass("loader");
+                        },
+                        success: function( data ) {
+                            // clear unselected option
+                            if(data.length > 0){
+                                $('#tag_list').find('option').not(':selected').remove();
+                                
+                                response( $.map( data, function( item ) {
+                                    $('#tag_list').append('<option value="'+item.id+'">' + item.text + '</option>');
+                                }));
+                                $("#tag_list").trigger("chosen:updated");
+                            }
+                        },
+                        complete: function() {
+                            counter--;
+                            if (counter <= 0) {
+                                $(".icon-container i").removeClass('loader');
+                            }
+                        }
+                    });
+                }
+            }
+        });
     });
     </script>
 @endsection
@@ -134,6 +229,27 @@ Dokumen
   </ol>
 </nav>
 @stop
+
+@section('additional-content-filters')
+    <div id="filter-panel" class="filter-panel" style="height: auto;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <form id="filter-panel-form-id" class="form-inline">
+                <div class="form-group" style="position: relative;">
+                    <label for="tag" style="margin-right: 5px;">Tag :</label>
+                    <select multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
+                        <option></option>
+                    </select>
+                    <div class="icon-container">
+                        <i class=""></i>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+@stop
+
 @section('contents')
     @parent
     

@@ -17,6 +17,7 @@
                 
         button.dt-button {
             padding: .2em .5em;
+            margin-right: 0;
         }
         
         td.action {
