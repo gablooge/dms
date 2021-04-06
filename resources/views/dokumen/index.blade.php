@@ -240,7 +240,7 @@ Dokumen
             <form id="filter-panel-form-id" class="form-inline">
                 <div class="form-group" style="position: relative;">
                     <label for="tag" style="margin-right: 5px;">Tag :</label>
-                    <select multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
+                    <select data-placeholder="Pilih Tag..." multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
                         <option></option>
                     </select>
                     <div class="icon-container">
