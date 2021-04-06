@@ -104,20 +104,20 @@ Dokumen
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
-                    // d.kategori_id = $("#kategori_jenis_dokumen_id").val();
+                    d.tags = $("#tag_list").val();
                     Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 },
                 
             },
             "stateSaveParams": function (settings, data) {
                 //save state
-                // data.kategori_id = $("#kategori_jenis_dokumen_id").val();
+                // data.tags = $("#tag_list").val();
             },
             "stateLoadParams": function (settings, data) {
                 //exit is expired
                 if (data.time + (settings.iStateDuration * 1000) < Date.now())
                     return;
-                // $("#kategori_jenis_dokumen_id").val(data.kategori_id);
+                // $("#tag_list").val(data.tags);
             },
             columns: [
                 {
@@ -176,20 +176,23 @@ Dokumen
 
         $("#tag_list").chosen({
             width: "200px"
-        }); 
+        });
         $('#tag_list').on('chosen:ready', function(evt, params) {
             $("#tag_list_chosen").css("min-width","200px");
             $("#tag_list_chosen").css("width","auto");
+        });
+        $('#tag_list').on('change', function(evt, params) {
+            table.draw();
         });
         var counter = 0;
         $('#filter-panel-form-id .chosen-search-input').autocomplete({
             source: function( request, response ) {
                 if(request.term.length>1){
-                    
                     $.ajax({
                         url: "{{route('tag.select')}}",
                         data: {
                             q: request.term
+                            
                         },
                         dataType: "json",
                         beforeSend: function() {

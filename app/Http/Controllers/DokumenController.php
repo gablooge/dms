@@ -34,9 +34,14 @@ class DokumenController extends Controller
             $data = Dokumen::query();
             return Datatables::of($data)
                 ->addIndexColumn()
-                // ->addColumn('Tags', function (Dokumen $docs){
-                //     return join(",", $docs->tags_list()->pluck("nama_tag")->toArray());
-                // })
+                ->filter(function ($query) {
+                    if (request()->has('tags') && !empty(request()->tags)) {
+                        $tagIds = Tag::whereIn('nama_tag', request()->tags)->pluck('id');
+                        $query->whereHas('tags_list', function($q) use($tagIds) {
+                            $q->whereIn('id', $tagIds);
+                        });
+                    }
+                })
                 ->addColumn('action', function($row){
                     $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';
                     if($row->file != "-"){
