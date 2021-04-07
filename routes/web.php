@@ -6,6 +6,7 @@ use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\KategoriJenisDokumenController;
 use App\Http\Controllers\JenisDokumenController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\SolariumController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,9 @@ Route::get('dokumen/jenis/{jenisDokumen}/edit/', [JenisDokumenController::class,
 Route::put('dokumen/jenis/{jenisDokumen}', [JenisDokumenController::class, 'update'])->name('jenis.update');
 Route::delete('dokumen/jenis/{jenisDokumen}', [JenisDokumenController::class, 'destroy'])->name('jenis.destroy');
 // END Jenis
+
+Route::get('dokumen/solarium/ping', [SolariumController::class, 'ping'])->name('solarium.ping');
+
 
 // Route::resource('peraturan', PeraturanController::class);
 Route::get('peraturan', [PeraturanController::class, 'index']);

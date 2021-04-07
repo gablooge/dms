@@ -12,6 +12,7 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
+        "solarium/solarium": "^6.1",
         "yajra/laravel-datatables-oracle": "^9.17",
         "yajra/laravel-oci8": "8"
     },
