@@ -66,7 +66,7 @@ class DokumenController extends Controller
     {
         return view('dokumen.create');
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -87,6 +87,10 @@ class DokumenController extends Controller
             $dokumen = Dokumen::create($request->all());
             $dokumen->file = $fileName;
             $dokumen->save();
+            if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
+                $dokumen->solr = true;
+                $dokumen->save();
+            }
             return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
             return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
