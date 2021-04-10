@@ -7,6 +7,8 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
+use Illuminate\Support\Facades\DB;
+
 use File;
 
 class DokumenController extends Controller
@@ -40,6 +42,12 @@ class DokumenController extends Controller
                         $query->whereHas('tags_list', function($q) use($tagIds) {
                             $q->whereIn('id', $tagIds);
                         });
+                    }
+                    if(request()->has('search') && !empty(request()->search['value'])){
+                        $query->where(DB::raw('lower(perihal)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                        $query->orWhere(DB::raw('lower(nomor)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                        $query->orWhere(DB::raw('lower(tahun)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                        $query->orWhere(DB::raw('lower(tags)'), 'like', "%" .strtolower(request()->search['value']). "%");
                     }
                 })
                 ->addColumn('action', function($row){
@@ -150,6 +158,7 @@ class DokumenController extends Controller
             $dokumen->tahun = $request->tahun;
             $dokumen->nomor = $request->nomor;
             $dokumen->perihal = $request->perihal;
+            $dokumen->solr = false;
             $dokumen->save();
             // other information
             // Tags 
@@ -165,7 +174,7 @@ class DokumenController extends Controller
                 $dokumen->tags = join(",", $request->tag_list); 
                 $dokumen->save();  
             }
-
+            
 
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
