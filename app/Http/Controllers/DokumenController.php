@@ -175,7 +175,10 @@ class DokumenController extends Controller
                 $dokumen->save();  
             }
             
-
+            if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
+                $dokumen->solr = true;
+                $dokumen->save();
+            }
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
             return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));

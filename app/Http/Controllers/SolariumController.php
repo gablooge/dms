@@ -49,4 +49,30 @@ class SolariumController extends Controller
         $result = $client->update($update);
         return $result->getStatus();
     }
+    public function update($dokumen)
+    {
+        $adapter = new Curl();
+        $dispatcher = new EventDispatcher();
+
+        $client = new Client($adapter, $dispatcher, config('solarium'));
+
+        $update = $client->createUpdate();
+        $doc = $update->createDocument();
+        foreach( $dokumen->toArray() as $key => $value )
+        {
+            if($key == 'id')
+            {
+                $doc->setKey('id', $value);
+            }
+            else
+            {
+                $doc->setField($key, $value);
+                $doc->setFieldModifier($key, $doc::MODIFIER_SET);
+            }
+        }
+        $update->addDocuments(array($doc));
+        $update->addCommit();
+        $result = $client->update($update);
+        return $result->getStatus();
+    }
 }
