@@ -171,7 +171,7 @@ class DokumenController extends Controller
                 }
                 $tags = Tag::whereIn('nama_tag', $request->tag_list)->orderBy('nama_tag', 'ASC')->pluck('id');
                 $dokumen->tags_list()->sync($tags);
-                $dokumen->tags = join(",", $request->tag_list); 
+                $dokumen->tags = join(", ", $request->tag_list); 
                 $dokumen->save();  
             }
             
