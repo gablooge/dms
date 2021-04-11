@@ -194,13 +194,19 @@ class DokumenController extends Controller
     public function destroy(Dokumen $dokumen)
     {
         try{
-            $local_media_file = public_path('medias/'.$dokumen->file);
-            if(File::exists($local_media_file)){
-                File::delete($local_media_file);
+            if(app('App\Http\Controllers\SolariumController')->delete($dokumen->id) == 0){
+                $local_media_file = public_path('medias/'.$dokumen->file);
+                if(File::exists($local_media_file)){
+                    File::delete($local_media_file);
+                }
+                $dokumen->delete();
+                return redirect()->route('dokumen.index')
+                    ->with('messages', 'Data dokumen berhasil dihapus.');
+            }else{
+                return redirect()->route('dokumen.index')
+                    ->with('messages', 'Gagal menghapus data dari Sistem Solr.');
             }
-            $dokumen->delete();
-            return redirect()->route('dokumen.index')
-                        ->with('messages', 'Data dokumen berhasil dihapus.');
+            
         }catch(\Exception $e){
             return redirect()->route('dokumen.index')->with('messages', 'Data dokumen gagal dihapus. Error: <br />'.Str::limit($e->getMessage(), 150));
         }

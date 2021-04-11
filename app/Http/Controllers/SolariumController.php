@@ -49,6 +49,9 @@ class SolariumController extends Controller
         $result = $client->update($update);
         return $result->getStatus();
     }
+    // for tinker 
+    // $controller = app()->make('App\Http\Controllers\SolariumController');
+    // app()->call([$controller, 'delete'], ['dokumen' => $dokumen]);
     public function update($dokumen)
     {
         $adapter = new Curl();
@@ -71,6 +74,19 @@ class SolariumController extends Controller
             }
         }
         $update->addDocuments(array($doc));
+        $update->addCommit();
+        $result = $client->update($update);
+        return $result->getStatus();
+    }
+    public function delete($id)
+    {
+        $adapter = new Curl();
+        $dispatcher = new EventDispatcher();
+
+        $client = new Client($adapter, $dispatcher, config('solarium'));
+
+        $update = $client->createUpdate();
+        $update->addDeleteById($id);
         $update->addCommit();
         $result = $client->update($update);
         return $result->getStatus();
