@@ -24,6 +24,50 @@ class DokumenController extends Controller
         return view('dokumen.index');
     }
 
+    public function solr(Request $request)
+    {
+        try{
+            $resultset = app('App\Http\Controllers\SolariumController')->select($request);
+            $documentset = $resultset->getDocuments();
+            $data = [
+                "data" => [],
+                "draw" => 1,
+                "recordsFiltered" => $resultset->getNumFound(),
+                "recordsTotal" => $resultset->getNumFound()
+            ];
+            $documents = [];
+            $rowIndex = 1;
+            foreach ($documentset as $document) {
+                $doc = (object)[];
+                foreach ($document as $field => $value) {
+                    if (is_array($value)) {
+                        $value = implode(', ', $value);
+                    }
+                    $doc->$field = $value;
+                }
+
+                $doc->DT_RowIndex = $rowIndex;
+                $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$doc->id).'" method="POST">';
+                if($doc->file != "-"){
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$doc->file.'" type="button" title="'.$doc->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
+                }
+                $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$doc->id).'" title="Edit '.$doc->file.'"><span><i class="fa fa-edit"></i></span></a>';
+                $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$doc->file.'"><span><i class="fa fa-trash"></i></span></a>';
+                $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
+                $doc->action = $actionBtn;
+                array_push($documents, $doc);
+                $rowIndex = $rowIndex + 1;
+            }
+            $data["data"] = $documents;
+            return response()->json($data);
+        }catch(\Exception $e){
+            $data = [
+                'success' => false,
+                'message' => "Terjadi permasalahan saat akses data dari solr. Error: <br />".Str::limit($e->getMessage(), 150)
+            ];
+            return response()->json($data);
+        }
+    }
     /**
      * Display a listing of the resource as json.
      *

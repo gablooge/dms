@@ -28,6 +28,7 @@ Route::post('dokumen/store', [DokumenController::class, 'store'])->name('dokumen
 Route::get('dokumen/{dokumen}/edit/', [DokumenController::class, 'edit'])->name('dokumen.edit');
 Route::put('dokumen/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
 Route::delete('dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+Route::any('dokumen/solr', [DokumenController::class, 'solr'])->name('dokumen.solr');
 // END Dokumen
 
 // Tag 

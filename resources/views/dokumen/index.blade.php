@@ -100,7 +100,8 @@ Dokumen
             serverSide: true,
             paging: true,
             ajax: {
-                'url':"{{ route('dokumen.datatables') }}",
+                // 'url':"{{ route('dokumen.datatables') }}",
+                'url':"{{ route('dokumen.solr') }}",
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";

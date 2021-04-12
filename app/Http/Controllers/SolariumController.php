@@ -28,6 +28,30 @@ class SolariumController extends Controller
             return response()->json('ERROR', 500);
         }
     }
+    // $params = ['start' => '0', 'length' => '20'];
+    // $request = Illuminate\Http\Request::create('/select', 'get', $params);
+    // $controller = app()->make('App\Http\Controllers\SolariumController');
+    // app()->call([$controller, 'select'], ['request' => $request]);
+    public function select(Request $request)
+    {
+        $start = $request->query('start', "0");
+        $length = $request->query('length', "10");
+        $select = array(
+            'query'         => '*:*',
+            'start'         => $start,
+            'rows'          => $length,
+            'sort'          => array('tahun' => 'desc')
+        );
+        $adapter = new Curl();
+        $dispatcher = new EventDispatcher();
+        $client = new Client($adapter, $dispatcher, config('solarium'));
+
+        $query = $client->createSelect($select);
+        $resultset = $client->select($query);
+        // echo 'NumFound: '.$resultset->getNumFound();
+        return $resultset;
+    }
+
     // for tinker 
     // $controller = app()->make('App\Http\Controllers\SolariumController');
     // app()->call([$controller, 'add'], ['dokumen' => $dokumen]);
@@ -35,7 +59,6 @@ class SolariumController extends Controller
     {
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
-
         $client = new Client($adapter, $dispatcher, config('solarium'));
 
         $update = $client->createUpdate();
@@ -56,7 +79,6 @@ class SolariumController extends Controller
     {
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
-
         $client = new Client($adapter, $dispatcher, config('solarium'));
 
         $update = $client->createUpdate();
@@ -82,7 +104,6 @@ class SolariumController extends Controller
     {
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
-
         $client = new Client($adapter, $dispatcher, config('solarium'));
 
         $update = $client->createUpdate();
