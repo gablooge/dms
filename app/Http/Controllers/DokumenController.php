@@ -24,7 +24,17 @@ class DokumenController extends Controller
         
         return view('dokumen.index');
     }
-
+    public function getSolrDocumentFieldValue($document, $field)
+    {
+        if (isset($document->$field)){
+            $value = $document->$field;
+            if (is_array($value)) {
+                $value = implode(', ', $value);
+            }
+            return $value;
+        }
+        return "-";
+    }
     public function solr(Request $request)
     {
         try{
@@ -40,14 +50,19 @@ class DokumenController extends Controller
             $rowIndex = 1;
             foreach ($documentset as $document) {
                 $doc = (object)[];
-                foreach ($document as $field => $value) {
-                    if (is_array($value)) {
-                        $value = implode(', ', $value);
-                    }
-                    $doc->$field = $value;
-                }
-
+                // foreach ($document as $field => $value) {
+                //     if (is_array($value)) {
+                //         $value = implode(', ', $value);
+                //     }
+                //     $doc->$field = $value;
+                // }
                 $doc->DT_RowIndex = $rowIndex;
+                $doc->id = $document->id;
+                $doc->file = $this->getSolrDocumentFieldValue($document, "file");
+                $doc->nomor = $this->getSolrDocumentFieldValue($document, "nomor");
+                $doc->tahun = $this->getSolrDocumentFieldValue($document, "tahun");
+                $doc->tags = $this->getSolrDocumentFieldValue($document, "tags");
+                $doc->perihal = $this->getSolrDocumentFieldValue($document, "perihal");
                 $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$doc->id).'" method="POST">';
                 if($doc->file != "-"){
                     $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$doc->file.'" type="button" title="'.$doc->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
