@@ -15,7 +15,6 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 ### Requirements
 
-- **[Tesseract OCR](https://github.com/tesseract-ocr/tesseract)**
-- **[Tesseract OCR for PHP](https://github.com/thiagoalessio/tesseract-ocr-for-php)**
+- **[PDFtoText](https://github.com/spatie/pdf-to-text)**
 
 

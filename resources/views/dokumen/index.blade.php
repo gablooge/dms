@@ -100,15 +100,17 @@ Dokumen
             serverSide: true,
             paging: true,
             ajax: {
-                // 'url':"{{ route('dokumen.datatables') }}",
-                'url':"{{ route('dokumen.solr') }}",
+                'url':"{{ route('dokumen.datatables') }}",
+                // 'url':"{{ route('dokumen.solr') }}",
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
                     d.tags = $("#tag_list").val();
                     Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 },
-                
+                'complete': function(data){
+                    Notiflix.Block.Remove('.yajra-datatable');
+                }
             },
             "stateSaveParams": function (settings, data) {
                 //save state
@@ -119,6 +121,9 @@ Dokumen
                 if (data.time + (settings.iStateDuration * 1000) < Date.now())
                     return;
                 // $("#tag_list").val(data.tags);
+            },
+            "drawCallback": function(settings) {
+                
             },
             columns: [
                 {
@@ -150,6 +155,7 @@ Dokumen
         });
         
         table.on('processing.dt', function (e, settings, processing) {
+            // console.log(processing);
             if (!processing) {
                 Notiflix.Block.Remove('.yajra-datatable');
             }

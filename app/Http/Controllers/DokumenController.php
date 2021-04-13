@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
 use Illuminate\Support\Facades\DB;
+use Spatie\PdfToText\Pdf;
 
 use File;
 
@@ -138,7 +139,9 @@ class DokumenController extends Controller
             $request->file->move(public_path('medias'), $fileName);
             $dokumen = Dokumen::create($request->all());
             $dokumen->file = $fileName;
+            $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
             $dokumen->save();
+
             if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
                 $dokumen->solr = true;
                 $dokumen->save();
@@ -198,6 +201,7 @@ class DokumenController extends Controller
                 $fileName = time().' - '.$request->file->getClientOriginalName();
                 $request->file->move(public_path('medias'), $fileName);
                 $dokumen->file = $fileName;
+                $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
             }
             $dokumen->tahun = $request->tahun;
             $dokumen->nomor = $request->nomor;
@@ -207,6 +211,7 @@ class DokumenController extends Controller
             // other information
             // Tags 
             $dokumen->tags_list()->detach();
+            $dokumen->tags = null;
             if ($request->has('tag_list')) {
                 foreach($request->tag_list as $tagName){
                     $tag = Tag::firstOrNew(['nama_tag' => strtoupper($tagName)]);
@@ -216,9 +221,9 @@ class DokumenController extends Controller
                 $tags = Tag::whereIn('nama_tag', $request->tag_list)->orderBy('nama_tag', 'ASC')->pluck('id');
                 $dokumen->tags_list()->sync($tags);
                 $dokumen->tags = join(", ", $request->tag_list); 
-                $dokumen->save();  
             }
-            
+            $dokumen->save(); 
+
             if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
                 $dokumen->solr = true;
                 $dokumen->save();

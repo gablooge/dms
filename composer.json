@@ -13,7 +13,7 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "solarium/solarium": "^6.1",
-        "thiagoalessio/tesseract_ocr": "^2.11",
+        "spatie/pdf-to-text": "^1.4",
         "yajra/laravel-datatables-oracle": "^9.17",
         "yajra/laravel-oci8": "8"
     },
