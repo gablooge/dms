@@ -36,8 +36,12 @@ class SolariumController extends Controller
     {
         $start = $request->query('start', "0");
         $length = $request->query('length', "10");
+        $q = '*:*';
+        if($request->has('search') && !empty($request->search['value'])){
+            $q = "isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']}";
+        }
         $select = array(
-            'query'         => '*:*',
+            'query'         => $q,
             'start'         => $start,
             'rows'          => $length,
             'sort'          => array('tahun' => 'desc')
