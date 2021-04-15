@@ -168,7 +168,7 @@ Dokumen
 
             // Some nice improvements:
             // max tags is 3
-            maximumSelectionLength: 10,
+            maximumSelectionLength: 20,
             // add "(new tag)" for new tags
             createTag: function (params) {
                 var term = $.trim(params.term);
