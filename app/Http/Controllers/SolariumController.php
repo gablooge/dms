@@ -78,6 +78,7 @@ class SolariumController extends Controller
         return $result->getStatus();
     }
     // for tinker 
+    // $dokumen = App\Models\Dokumen::find(3);
     // $controller = app()->make('App\Http\Controllers\SolariumController');
     // app()->call([$controller, 'update'], ['dokumen' => $dokumen]);
     public function update($dokumen)
