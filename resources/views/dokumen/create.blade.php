@@ -149,6 +149,38 @@ Dokumen
                 modalpdf.find("h4.modal-title").html(filename.data("title-pdf"));
             }
         });
+
+        $('#tag_list').select2({
+            tags: true,
+            tokenSeparators: [','],
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{route('tag.select')}}',
+                dataType: 'json',
+                processResults: function(data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            // Some nice improvements:
+            // max tags is 3
+            maximumSelectionLength: 20,
+            // add "(new tag)" for new tags
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if (term === '') {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term + ' (new tag)'
+                };
+            },
+        });
     });
     </script>
 @endsection
@@ -192,17 +224,24 @@ Dokumen
         </div>
         <div class="form-group">
             <label for="nomor">Nomor</label>
-            <input type="text" id="nomor" name="nomor" class="form-control" placeholder="Nomor Dokumen"  required="">
+            <input type="text" id="nomor" name="nomor" class="form-control" value="{{ $dokumen->nomor }}" placeholder="Nomor Dokumen"  required="">
         </div>
         <div class="form-group">
             <label for="tahun">Tahun</label>
-            {!! Form::selectYear('tahun', 1945, now()->year, null, ['class' => 'form-control select2']) !!}
+            {!! Form::selectYear('tahun', 1945, now()->year, $dokumen->tahun, ['class' => 'form-control select2']) !!}
         </div>
         <div class="form-group">
             <label for="perihal">Perihal</label>
-            <textarea class="form-control" id="perihal" name="perihal" rows="3"></textarea>
+            <textarea class="form-control" id="perihal" name="perihal" rows="3">{{ $dokumen->perihal }}</textarea>
         </div>
-        
+        <div class="form-group">
+            <label for="tag_list">Tag</label>
+            <select multiple="multiple" class="form-control" id="tag_list" name="tag_list[]">
+                @foreach($dokumen->tags_list as $tag)
+                    <option value="{{ $tag->nama_tag }}" selected>{{ $tag->nama_tag }}</option>
+                @endforeach
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
         <div class="float-right">
             <a class="btn btn-secondary" href="{{ route('dokumen.index') }}"> Batal</a>

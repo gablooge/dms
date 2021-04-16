@@ -134,11 +134,27 @@ class DokumenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('dokumen.create');
+        $dokumen = new Dokumen($request->all());
+        return view('dokumen.create', compact('dokumen'));
     }
-    
+    public function save_tags(Dokumen $dokumen, Request $request)
+    {
+        $dokumen->tags_list()->detach();
+        $dokumen->tags = null;
+        if ($request->has('tag_list')) {
+            foreach($request->tag_list as $tagName){
+                $tag = Tag::firstOrNew(['nama_tag' => strtoupper($tagName)]);
+                $tag->keterangan = $tagName;
+                $tag->save();
+            }
+            $tags = Tag::whereIn('nama_tag', $request->tag_list)->orderBy('nama_tag', 'ASC')->pluck('id');
+            $dokumen->tags_list()->sync($tags);
+            $dokumen->tags = join(", ", $request->tag_list); 
+        }
+        $dokumen->save(); 
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -160,14 +176,20 @@ class DokumenController extends Controller
             $dokumen->file = $fileName;
             $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
             $dokumen->save();
+            
+            // other information
+            // Tags 
+            $this->save_tags($dokumen, $request);
 
             if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
                 $dokumen->solr = true;
                 $dokumen->save();
             }
-            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data Dokumen telah disimpan');
+            return redirect()->route('dokumen.index', $dokumen->id)->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+            // return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
+            $dokumen = new Dokumen($request->all());
+            return view('dokumen.create', compact('dokumen'))->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
         }
     }
 
@@ -229,19 +251,7 @@ class DokumenController extends Controller
             $dokumen->save();
             // other information
             // Tags 
-            $dokumen->tags_list()->detach();
-            $dokumen->tags = null;
-            if ($request->has('tag_list')) {
-                foreach($request->tag_list as $tagName){
-                    $tag = Tag::firstOrNew(['nama_tag' => strtoupper($tagName)]);
-                    $tag->keterangan = $tagName;
-                    $tag->save();
-                }
-                $tags = Tag::whereIn('nama_tag', $request->tag_list)->orderBy('nama_tag', 'ASC')->pluck('id');
-                $dokumen->tags_list()->sync($tags);
-                $dokumen->tags = join(", ", $request->tag_list); 
-            }
-            $dokumen->save(); 
+            $this->save_tags($dokumen, $request);
 
             if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
                 $dokumen->solr = true;
@@ -249,7 +259,9 @@ class DokumenController extends Controller
             }
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
+            // return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
+            $dokumen = new Dokumen($request->all());
+            return view('dokumen.edit', compact('dokumen'))->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
         }
     }
 
