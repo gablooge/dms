@@ -110,6 +110,10 @@ Dokumen
                 },
                 'complete': function(data){
                     Notiflix.Block.Remove('.yajra-datatable');
+                    respon = JSON.parse(data.responseText);
+                    if(respon.success == false){
+                        Notiflix.Report.Failure( 'Load Data Gagal', respon.message, 'Tutup' ); 
+                    }
                 }
             },
             "stateSaveParams": function (settings, data) {

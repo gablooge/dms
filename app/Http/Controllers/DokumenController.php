@@ -78,6 +78,7 @@ class DokumenController extends Controller
             return response()->json($data);
         }catch(\Exception $e){
             $data = [
+                'data' => [],
                 'success' => false,
                 'message' => "Terjadi permasalahan saat akses data dari solr. Error: <br />".Str::limit($e->getMessage(), 150)
             ];
