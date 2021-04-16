@@ -69,7 +69,7 @@ class DokumenController extends Controller
                 }
                 $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$doc->id).'" title="Edit '.$doc->file.'"><span><i class="fa fa-edit"></i></span></a>';
                 $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$doc->file.'"><span><i class="fa fa-trash"></i></span></a>';
-                $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
+                $actionBtn = $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
                 $doc->action = $actionBtn;
                 array_push($documents, $doc);
                 $rowIndex = $rowIndex + 1;
@@ -252,6 +252,7 @@ class DokumenController extends Controller
             // other information
             // Tags 
             $this->save_tags($dokumen, $request);
+            // end tags
 
             if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
                 $dokumen->solr = true;
@@ -259,7 +260,7 @@ class DokumenController extends Controller
             }
             return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
+            return redirect()->route('dokumen.edit', $dokumen->id)->with('messages', 'Data dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 2000));
         }
     }
 
