@@ -57,6 +57,7 @@ class SolariumController extends Controller
     }
 
     // for tinker 
+    // $dokumen = App\Models\Dokumen::find(1);
     // $controller = app()->make('App\Http\Controllers\SolariumController');
     // app()->call([$controller, 'add'], ['dokumen' => $dokumen]);
     public function add($dokumen)
