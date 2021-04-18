@@ -129,6 +129,11 @@ Dokumen
             "drawCallback": function(settings) {
                 
             },
+            "createdRow": function( row, data, dataIndex){
+                if(data.solr == 0){
+                    $(row).addClass('bg-warning');
+                }
+            },
             columns: [
                 {
                     "data": 'DT_RowIndex',
