@@ -21,8 +21,11 @@ class DokumenController extends Controller
      */
     public function index()
     {
-        
         return view('dokumen.index');
+    }
+    public function db()
+    {
+        return view('dokumen.db');
     }
     public function getSolrDocumentFieldValue($document, $field)
     {
@@ -85,6 +88,37 @@ class DokumenController extends Controller
             return response()->json($data);
         }
     }
+    public function database(Request $request)
+    {
+        $data = Dokumen::query();
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->filter(function ($query) {
+                if (request()->has('tags') && !empty(request()->tags)) {
+                    $tagIds = Tag::whereIn('nama_tag', request()->tags)->pluck('id');
+                    $query->whereHas('tags_list', function($q) use($tagIds) {
+                        $q->whereIn('id', $tagIds);
+                    });
+                }
+                if(request()->has('search') && !empty(request()->search['value'])){
+                    $query->where(DB::raw('lower(perihal)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                    $query->orWhere(DB::raw('lower(nomor)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                    $query->orWhere(DB::raw('lower(tahun)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                    $query->orWhere(DB::raw('lower(tags)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                }
+            })
+            ->addColumn('action', function($row){
+                $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';
+                if($row->file != "-"){
+                    $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
+                }
+                $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$row->id).'" title="Edit '.$row->file.'"><span><i class="fa fa-edit"></i></span></a>';
+                $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->file.'"><span><i class="fa fa-trash"></i></span></a>';
+                return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     /**
      * Display a listing of the resource as json.
      *
@@ -92,37 +126,11 @@ class DokumenController extends Controller
      */
     public function datatables(Request $request)
     {
-        if(env('DB_SEARCH', 'SOLR') == 'DB'){
+        $source = $request->input('source', env('DB_SEARCH', 'SOLR'));
+        
+        if($source == 'DB'){
             if ($request->ajax()) {
-                $data = Dokumen::query();
-                return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->filter(function ($query) {
-                        if (request()->has('tags') && !empty(request()->tags)) {
-                            $tagIds = Tag::whereIn('nama_tag', request()->tags)->pluck('id');
-                            $query->whereHas('tags_list', function($q) use($tagIds) {
-                                $q->whereIn('id', $tagIds);
-                            });
-                        }
-                        if(request()->has('search') && !empty(request()->search['value'])){
-                            $query->where(DB::raw('lower(perihal)'), 'like', "%" .strtolower(request()->search['value']). "%");
-                            $query->orWhere(DB::raw('lower(nomor)'), 'like', "%" .strtolower(request()->search['value']). "%");
-                            $query->orWhere(DB::raw('lower(tahun)'), 'like', "%" .strtolower(request()->search['value']). "%");
-                            $query->orWhere(DB::raw('lower(tags)'), 'like', "%" .strtolower(request()->search['value']). "%");
-                        }
-                    })
-                    ->addColumn('action', function($row){
-                        $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';
-                        if($row->file != "-"){
-                            $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm buttons-pdf buttons-html5" tabindex="0" aria-controls="download" data-file="/medias/'.$row->file.'" type="button" title="'.$row->file.'"><span><i class="fa fa-file-pdf-o"></i></span></a>';
-                        }
-                        $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" href="'.route('dokumen.edit',$row->id).'" title="Edit '.$row->file.'"><span><i class="fa fa-edit"></i></span></a>';
-                        $actionBtn = $actionBtn.'<a class="dt-button dt-btn-sm" onclick="if(confirm(\'Apakah Anda yakin ingin menghapus data ini?\')){$(this).closest(\'form\').submit();}" title="Hapus '.$row->file.'"><span><i class="fa fa-trash"></i></span></a>';
-                        return $actionBtn.'<input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"></form>';
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-                
+                return $this->database($request);
             }
         }else{
             return $this->solr($request);

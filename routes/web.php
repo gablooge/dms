@@ -22,6 +22,7 @@ use App\Http\Controllers\SolariumController;
 // Dokumen
 Route::get('/', [DokumenController::class, 'index']);
 Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
+Route::get('dokumen/db', [DokumenController::class, 'db'])->name('dokumen.db');
 Route::any('dokumen/datatables', [DokumenController::class, 'datatables'])->name('dokumen.datatables');
 Route::any('dokumen/create', [DokumenController::class, 'create'])->name('dokumen.create');
 Route::post('dokumen/store', [DokumenController::class, 'store'])->name('dokumen.store');
@@ -29,6 +30,7 @@ Route::get('dokumen/{dokumen}/edit/', [DokumenController::class, 'edit'])->name(
 Route::put('dokumen/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
 Route::delete('dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
 Route::any('dokumen/solr', [DokumenController::class, 'solr'])->name('dokumen.solr');
+Route::any('dokumen/database', [DokumenController::class, 'database'])->name('dokumen.database');
 // END Dokumen
 
 // Tag 

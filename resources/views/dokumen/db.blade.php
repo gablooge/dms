@@ -101,7 +101,7 @@ Dokumen
             paging: true,
             ajax: {
                 // 'url':"{{ route('dokumen.datatables') }}",
-                'url':"{{ route('dokumen.solr') }}",
+                'url':"{{ route('dokumen.database') }}",
                 "type": "POST",
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
@@ -266,7 +266,7 @@ Dokumen
 
 @section('additional-cog')
     <div class="pull-right">
-        <a class="btn btn-sm btn-outline-success" href="{{ route('dokumen.db') }}" role="button"><i class="fa fa-database" title="Database Oracle"></i></a>
+        <a class="btn btn-sm btn-outline-info" href="{{ route('dokumen.index') }}" role="button"><i class="fa fa-sun-o" title="Apache SOLR"></i></a>
     </div>
 @stop
 
