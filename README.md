@@ -81,7 +81,27 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > echo " extension = oci8.so " >> /etc/php/7.4/cli/php.ini
 
+    > echo " extension = oci8.so " >> /etc/php/7.4/apache2/php.ini
+
+    - For Apache2
+
+    > echo "LD_LIBRARY_PATH=\"/opt/oracle/instantclient\"" >> /etc/environment
+
+    > echo "ORACLE_HOME=\"/opt/oracle/instantclient\"" >> /etc/environment
+
+    > echo "LD_LIBRARY_PATH=\"/opt/oracle/instantclient\"" >> /etc/apache2/envvars
+
+    > echo "ORACLE_HOME=\"/opt/oracle/instantclient\"" >> /etc/apache2/envvars
+
+    > service apache2 restart
+
+    - for testing phpinfo with apache2
+
+    > echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
+
     > exit
+
+    > sensible-browser http://localhost/info.php
 
 - Pastikan pdf-to-text sudah terinstall
 
