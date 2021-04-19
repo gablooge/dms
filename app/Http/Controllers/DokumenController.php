@@ -63,7 +63,7 @@ class DokumenController extends Controller
             $documentset = $resultset->getDocuments();
             $data = [
                 "data" => [],
-                "draw" => 1,
+                "draw" => $request->input('draw', 1),
                 "recordsFiltered" => $resultset->getNumFound(),
                 "recordsTotal" => $resultset->getNumFound()
             ];
