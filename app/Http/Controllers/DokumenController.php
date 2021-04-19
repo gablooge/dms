@@ -38,6 +38,24 @@ class DokumenController extends Controller
         }
         return "-";
     }
+    public function sync(Request $request)
+    {
+        $params['all'] = $request->query('all', false);
+        try{
+            dispatch(new \App\Jobs\SyncSolrDatabaseJob($params));
+            $data = [
+                'success' => true,
+                'message' => "Sinkronisasi berhasil dijalankan."
+            ];
+            return response()->json($data);
+        }catch(\Exception $e){
+            $data = [
+                'success' => false,
+                'message' => "Terjadi permasalahan saat sinkronisasi batch database ke solr. Error: <br />".Str::limit($e->getMessage(), 150)
+            ];
+            return response()->json($data);
+        }
+    }
     public function solr(Request $request)
     {
         try{

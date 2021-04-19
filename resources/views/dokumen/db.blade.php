@@ -184,6 +184,29 @@ Dokumen
                     action: function ( e, dt, node, config ) {
                         $("#title-card-id .card-body").collapse('toggle');
                     }
+                },{
+                    text: '<i class="fa fa-random"></i>',
+                    titleAttr: 'Sinkronisasi Solr',
+                    attr: { id: 'sync-btn-id' },
+                    action: function ( e, dt, node, config ) {
+                        $((this)[0].node).html('<span><i class="fa fa-refresh fa-spin fa-fw"></i></span>')
+                        $.ajax({
+                            method: "GET",
+                            url: "{{ route('dokumen.sync') }}",
+                            data: { all: true }
+                        })
+                        .done(function( respon ) {
+                            if(respon.success == false){
+                                Notiflix.Report.Failure( 'Singkronisasi Gagal', respon.message, 'Tutup' ); 
+                            }else{
+                                Notiflix.Notify.Success(respon.message);
+                                $("#sync-btn-id").html('<span><i class="fa fa-random"></i></span>')
+                                table.draw();
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) { 
+                            Notiflix.Report.Failure( 'Singkronisasi Gagal', errorThrown, 'Tutup' ); 
+                        });;
+                    }
                 }
             ]
         });

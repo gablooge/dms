@@ -124,7 +124,11 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - Serving Laravel
     > php artisan serve --host=0.0.0.0
 
+- Configuration of Queue
+    > php artisan queue:table
 
+    > php artisan migrate
+    
 ### Centos 7
 - **[Centos 7](https://www.cyberciti.biz/faq/install-php-7-x-on-centos-8-for-nginx/)**
 

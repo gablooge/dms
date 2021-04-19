@@ -30,6 +30,7 @@ Route::get('dokumen/{dokumen}/edit/', [DokumenController::class, 'edit'])->name(
 Route::put('dokumen/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
 Route::delete('dokumen/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
 Route::any('dokumen/solr', [DokumenController::class, 'solr'])->name('dokumen.solr');
+Route::any('dokumen/sync', [DokumenController::class, 'sync'])->name('dokumen.sync');
 Route::any('dokumen/database', [DokumenController::class, 'database'])->name('dokumen.database');
 // END Dokumen
 
