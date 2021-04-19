@@ -120,11 +120,15 @@ class DokumenController extends Controller
                         });
                     }
                     if(request()->has('search') && !empty(request()->search['value'])){
-                        $query->where(DB::raw('lower(perihal)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                        $query->orWhere(DB::raw('lower(perihal)'), 'like', "%" .strtolower(request()->search['value']). "%");
                         $query->orWhere(DB::raw('lower(nomor)'), 'like', "%" .strtolower(request()->search['value']). "%");
                         $query->orWhere(DB::raw('lower(tahun)'), 'like', "%" .strtolower(request()->search['value']). "%");
                         $query->orWhere(DB::raw('lower(tags)'), 'like', "%" .strtolower(request()->search['value']). "%");
                     }
+                    if (request()->has('solr') && request()->solr != null && (request()->solr == 1 || request()->solr == 0)) {
+                        $query->where('solr', '=', request()->solr);
+                    }
+                    
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '<form onsubmit="Notiflix.Loading.Dots(\'Deleting...\');" action="'.route('dokumen.destroy',$row->id).'" method="POST">';

@@ -29,7 +29,9 @@ Dokumen
             background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
             -webkit-backface-visibility: hidden;
         }
-        
+        .form-group {
+            margin-bottom: 0rem;
+        }
         /** loading input **/
         .icon-container {
             position: absolute;
@@ -106,6 +108,7 @@ Dokumen
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
                     d.tags = $("#tag_list").val();
+                    d.solr = $("#solr").val();
                     Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 },
                 'complete': function(data){
@@ -213,14 +216,16 @@ Dokumen
 
         table.buttons(0, null).container().appendTo($('#documentDatatableId_filter'));
 
-        $("#tag_list").chosen({
+        $("#tag_list, #solr").chosen({
             width: "200px"
         });
-        $('#tag_list').on('chosen:ready', function(evt, params) {
-            $("#tag_list_chosen").css("min-width","200px");
-            $("#tag_list_chosen").css("width","auto");
-        });
-        $('#tag_list').on('change', function(evt, params) {
+        $("#title-card-id .card-body").on('shown.bs.collapse', function () {
+            if($("#tag_list_chosen").find(".icon-container").length<1){
+                $("#tag_list_chosen").append('<div class="icon-container"><i class=""></i></div>');
+            }
+            
+        })
+        $('#tag_list, #solr').on('change', function(evt, params) {
             table.draw();
         });
         var counter = 0;
@@ -276,14 +281,26 @@ Dokumen
     <div id="filter-panel" class="filter-panel" style="height: auto;">
         <div class="panel panel-default">
             <div class="panel-body">
-            <form id="filter-panel-form-id" class="form-inline">
-                <div class="form-group" style="position: relative;">
-                    <label for="tag" style="margin-right: 5px;">Tag :</label>
-                    <select data-placeholder="Pilih Tag..." multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
-                        <option></option>
-                    </select>
-                    <div class="icon-container">
-                        <i class=""></i>
+            <form id="filter-panel-form-id">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="SOLR">
+                        Status SOLR?
+                    </label>
+                    <div class="col-sm-10" style="padding-top: calc(.375rem + 1px);">
+                        <select data-placeholder="Pilih status..." class="form-control" id="solr" name="solr" style="min-width: 200px;">
+                            <option selected value="">All</option>
+                            <option value="1">Sudah terupdate</option>
+                            <option value="0">Belum terupdate</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="tag_list">Tag</label>
+                    <div class="col-sm-10" style="position: relative; padding-top: calc(.375rem + 1px);">
+                        <select data-placeholder="Pilih Tag..." multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
+                            <option></option>
+                        </select>
+                        
                     </div>
                 </div>
             </form>
