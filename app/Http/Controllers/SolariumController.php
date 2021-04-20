@@ -47,6 +47,7 @@ class SolariumController extends Controller
         // echo 'NumFound: '.$resultset->getNumFound();
         return $resultset->getNumFound();
     } 
+
     // $params = ['start' => '0', 'length' => '20'];
     // $request = Illuminate\Http\Request::create('/select', 'get', $params);
     // $controller = app()->make('App\Http\Controllers\SolariumController');
@@ -57,7 +58,13 @@ class SolariumController extends Controller
         $length = $request->query('length', "10");
         $q = '*:*';
         if($request->has('search') && !empty($request->search['value'])){
-            $q = "isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']}";
+            $q = "(isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']}) ";
+        }
+        if ($request->has('tags') && !empty($request->tags)) {
+            $tags = array_map(function ($tag) {
+                return "tags:".$tag;
+            }, $request->tags);
+            $q = $q." AND ".join("OR ", $tags);
         }
         $select = array(
             'query'         => $q,
