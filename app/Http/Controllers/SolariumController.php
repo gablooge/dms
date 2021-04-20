@@ -28,6 +28,25 @@ class SolariumController extends Controller
             return response()->json('ERROR', 500);
         }
     }
+    // $controller = app()->make('App\Http\Controllers\SolariumController');
+    // app()->call([$controller, 'total']);
+    public function total()
+    {
+        $select = array(
+            'query'         => '*:*',
+            'start'         => "0",
+            'rows'          => "0",
+            'sort'          => array('tahun' => 'desc')
+        );
+        $adapter = new Curl();
+        $dispatcher = new EventDispatcher();
+        $client = new Client($adapter, $dispatcher, config('solarium'));
+
+        $query = $client->createSelect($select);
+        $resultset = $client->select($query);
+        // echo 'NumFound: '.$resultset->getNumFound();
+        return $resultset->getNumFound();
+    } 
     // $params = ['start' => '0', 'length' => '20'];
     // $request = Illuminate\Http\Request::create('/select', 'get', $params);
     // $controller = app()->make('App\Http\Controllers\SolariumController');

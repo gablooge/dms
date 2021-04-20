@@ -65,7 +65,7 @@ class DokumenController extends Controller
                 "data" => [],
                 "draw" => $request->input('draw', 1),
                 "recordsFiltered" => $resultset->getNumFound(),
-                "recordsTotal" => $resultset->getNumFound()
+                "recordsTotal" => app('App\Http\Controllers\SolariumController')->total()
             ];
             $documents = [];
             $rowIndex = 1;
