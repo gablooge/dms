@@ -64,8 +64,9 @@ class SolariumController extends Controller
             $tags = array_map(function ($tag) {
                 return "tags:".$tag;
             }, $request->tags);
-            $q = $q." AND ".join("OR ", $tags);
+            $q = $q." AND (".join(" OR ", $tags).")";
         }
+        dd($q);
         $select = array(
             'query'         => $q,
             'start'         => $start,
