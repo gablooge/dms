@@ -66,7 +66,6 @@ class SolariumController extends Controller
             }, $request->tags);
             $q = $q." AND (".join(" OR ", $tags).")";
         }
-        dd($q);
         $select = array(
             'query'         => $q,
             'start'         => $start,
