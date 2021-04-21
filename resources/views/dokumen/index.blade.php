@@ -106,6 +106,7 @@ Dokumen
                 'data': function (d) {
                     d._token = "{{ csrf_token() }}";
                     d.tags = $("#tag_list").val();
+                    d.match_tag_list = $("input[type=radio][name=match_tag_list]:checked").val();
                     Notiflix.Block.Circle('.yajra-datatable','Loading...');
                 },
                 'complete': function(data){
@@ -192,7 +193,7 @@ Dokumen
             $("#tag_list_chosen").css("min-width","200px");
             $("#tag_list_chosen").css("width","auto");
         });
-        $('#tag_list').on('change', function(evt, params) {
+        $('#filter-panel-form-id select, #filter-panel-form-id input').on('change', function(evt, params) {
             table.draw();
         });
         var counter = 0;
@@ -248,14 +249,24 @@ Dokumen
     <div id="filter-panel" class="filter-panel" style="height: auto;">
         <div class="panel panel-default">
             <div class="panel-body">
-            <form id="filter-panel-form-id" class="form-inline">
-                <div class="form-group" style="position: relative;">
-                    <label for="tag" style="margin-right: 5px;">Tag :</label>
-                    <select data-placeholder="Pilih Tag..." multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
-                        <option></option>
-                    </select>
-                    <div class="icon-container">
-                        <i class=""></i>
+            <form id="filter-panel-form-id">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="tag_list">Tag</label>
+                    <div class="col-sm-10" style="position: relative; padding-top: calc(.375rem + 1px);">
+                        <select data-placeholder="Pilih Tag..." multiple="multiple" class="form-control" id="tag_list" name="tag_list[]" style="min-width: 200px;">
+                            <option></option>
+                        </select>
+                        <div class="form-check form-check-inline ml-2">
+                            <label class="form-check-label">Match: </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="match_tag_list" id="match_tag_list_all" value="AND">
+                            <label class="form-check-label" for="match_tag_list_all">All</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="match_tag_list" id="match_tag_list_any" value="OR" checked>
+                            <label class="form-check-label" for="match_tag_list_any">Any</label>
+                        </div>
                     </div>
                 </div>
             </form>
