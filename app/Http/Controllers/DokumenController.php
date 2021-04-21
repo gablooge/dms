@@ -124,6 +124,7 @@ class DokumenController extends Controller
                         $query->orWhere(DB::raw('lower(nomor)'), 'like', "%" .strtolower(request()->search['value']). "%");
                         $query->orWhere(DB::raw('lower(tahun)'), 'like', "%" .strtolower(request()->search['value']). "%");
                         $query->orWhere(DB::raw('lower(tags)'), 'like', "%" .strtolower(request()->search['value']). "%");
+                        $query->orWhere(DB::raw('lower(isi)'), 'like', "%" .strtolower(request()->search['value']). "%");
                     }
                     if (request()->has('solr') && request()->solr != null && (request()->solr == 1 || request()->solr == 0)) {
                         $query->where('solr', '=', request()->solr);
