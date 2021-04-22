@@ -56,18 +56,22 @@ class SolariumController extends Controller
     {
         $start = $request->query('start', "0");
         $length = $request->query('length', "10");
-        $q = '*:*';
+        $q = array();
         if($request->has('search') && !empty($request->search['value'])){
-            $q = "(isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']}) ";
+            array_push($q, "(isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']})");
         }
         if ($request->has('tags') && !empty($request->tags)) {
             $tags = array_map(function ($tag) {
                 return "tags:".$tag;
             }, $request->tags);
-            $q = $q." AND (".join(" OR ", $tags).")";
+            array_push($q, "(".join(" ".$request->match_tag_list." ", $tags).")");
+        }
+        $query = '*:*';
+        if (!empty($q)) {
+            $query = join(" AND ", $q);
         }
         $select = array(
-            'query'         => $q,
+            'query'         => $query,
             'start'         => $start,
             'rows'          => $length,
             'sort'          => array('tahun' => 'desc')
