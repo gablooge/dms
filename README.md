@@ -38,7 +38,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - Install PHP 7.4
     > sudo apt update && sudo apt upgrade
 
-    > sudo apt install php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unzip poppler-utils
+    > sudo apt install php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unzip poppler-utils ocrmypdf leptonica-progs libleptonica-dev
 
     > php -v
 
@@ -110,6 +110,22 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
     - Jika belum install dengan command di bawah ini
 
     > sudo apt-get install poppler-utils
+
+- Pastikan ocrmypdf sudah terinstall
+    > which ocrmypdf
+
+    - Sesuaikan alamat path ocrmypdf pada variabel BIN_OCRMYPDF dalam file .env
+    
+- Install JBIG2 for OCRMYPDF
+    > git clone https://github.com/agl/jbig2enc
+
+    > cd jbig2enc
+
+    > ./autogen.sh
+
+    > ./configure && make
+
+    > sudo make install
 
 - Pastikan masih berada dalam folder root project dan pastikan versi composer nya 1.x bukan 2.x
 

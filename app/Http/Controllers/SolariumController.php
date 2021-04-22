@@ -139,6 +139,9 @@ class SolariumController extends Controller
         // $result = $client->update($update);
         // return $result->getStatus();
     }
+    // $dokumen = App\Models\Dokumen::find(1);
+    // $controller = app()->make('App\Http\Controllers\SolariumController');
+    // app()->call([$controller, 'delete'], ['id' => $dokumen->id]);
     public function delete($id)
     {
         $adapter = new Curl();
