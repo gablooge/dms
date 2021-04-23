@@ -101,7 +101,7 @@ class DokumenController extends Controller
             $data = [
                 'data' => [],
                 'success' => false,
-                'message' => "Terjadi permasalahan saat akses data dari solr. Error: <br />".Str::limit($e->getMessage(), 150)
+                'message' => "Terjadi permasalahan saat akses data dari solr. Error: <br />".Str::limit($e->getMessage(), 500)
             ];
             return response()->json($data);
         }
@@ -208,7 +208,7 @@ class DokumenController extends Controller
             'tahun' => ['required'],
             'nomor' => ['required', 'max:200'],
         ]);
-          
+        $fileName = "";
         try{
             $fileName = time().' - '.$request->file->getClientOriginalName();
             $request->file->move(public_path('medias'), $fileName);
@@ -226,11 +226,11 @@ class DokumenController extends Controller
                 $dokumen->solr = true;
                 $dokumen->save();
             }
-            return redirect()->route('dokumen.index', $dokumen->id)->with('messages', 'Data Dokumen telah disimpan');
+            return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
         }catch(\Exception $e){
-            // return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 150));
-            $dokumen = new Dokumen($request->all());
-            return view('dokumen.create', compact('dokumen'))->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
+            return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 500));
+            // $dokumen = new Dokumen($request->all());
+            // return view('dokumen.create', compact('dokumen'))->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 200));
         }
     }
 

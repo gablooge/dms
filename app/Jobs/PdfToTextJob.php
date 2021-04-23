@@ -41,7 +41,7 @@ class PdfToTextJob implements ShouldQueue
             $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
             $process->run();
             if (!$process->isSuccessful()) {
-                throw new Exception('Failed convert pdf tobe searchable text.');
+                //throw new \Exception('Failed convert pdf tobe searchable text.');
             }
             $dokumen->solr = false;
             $dokumen->isi = Pdf::getText(public_path('medias/'.$dokumen->file));

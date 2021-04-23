@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Solarium\Client;
 use Solarium\Core\Client\Adapter\Curl;
 use Symfony\Component\EventDispatcher\EventDispatcher; 
+use Symfony\Component\Process\Process;
+use Spatie\PdfToText\Pdf;
+use App\Models\Dokumen;
 
 class SolariumController extends Controller
 {
@@ -58,7 +61,7 @@ class SolariumController extends Controller
         $length = $request->query('length', "10");
         $q = array();
         if($request->has('search') && !empty($request->search['value'])){
-            array_push($q, "(isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']})");
+            array_push($q, "(nomor:{$request->search['value']} OR isi:{$request->search['value']} OR tags:{$request->search['value']} OR perihal:{$request->search['value']})");
         }
         if ($request->has('tags') && !empty($request->tags)) {
             $tags = array_map(function ($tag) {
@@ -100,7 +103,11 @@ class SolariumController extends Controller
         $doc = $update->createDocument();
         foreach( $dokumen->toArray() as $key => $value )
         {
-            $doc->$key = $value;
+            if($key == "tahun"){
+                $doc->$key = strval($value);
+            }else if($key != "solr"){
+                $doc->$key = $value;
+            }
         }
         $update->addDocuments(array($doc));
         $update->addCommit();
@@ -157,5 +164,41 @@ class SolariumController extends Controller
         $update->addCommit();
         $result = $client->update($update);
         return $result->getStatus();
+    }
+    // app()->call([$controller, 'sync'], ['all' => true]);
+    public function sync($all = false)
+    {
+        // all is true
+        $dokumen_list = [];
+        
+        if($all){
+            $dokumen_list = Dokumen::all();
+        }else{
+            $dokumen_list = Dokumen::where('solr', false)->get();
+        }
+        foreach ($dokumen_list as $dokumen) {
+            $dokumen->solr = false;
+            try{
+                $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
+                $process->run();
+                // echo $dokumen->id." : ";
+                if (!$process->isSuccessful()) {
+                    // throw new \Exception('Failed convert pdf to be searchable text.');
+                    // echo "gagal\n";
+                }else{
+                    // echo "sukses\n";
+                }
+                $dokumen->isi = Pdf::getText(public_path('medias/'.$dokumen->file));
+                $dokumen->save();
+                if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
+                    $dokumen->solr = true;
+                }
+                $dokumen->save();
+            }catch(\Exception $e){
+                // ngapain nih kalau gagal di proses queue?
+                // echo $e->getMessage();
+            }
+        }
+        
     }
 }
