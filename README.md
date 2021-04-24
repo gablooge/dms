@@ -113,8 +113,12 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
 - Pastikan ocrmypdf sudah terinstall
     > which ocrmypdf
+    
+    - Jika belum install dengan command di bawah ini
 
-    - Sesuaikan alamat path ocrmypdf pada variabel BIN_OCRMYPDF dalam file .env
+    > sudo apt-get install ocrmypdf leptonica-progs libleptonica-dev
+
+    - Sesuaikan alamat path binary ocrmypdf pada variabel BIN_OCRMYPDF dalam file .env
     
 - Install JBIG2 for OCRMYPDF
     > git clone https://github.com/agl/jbig2enc
