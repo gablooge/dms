@@ -153,4 +153,74 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - **[Centos 7](https://www.cyberciti.biz/faq/install-php-7-x-on-centos-8-for-nginx/)**
 
 
+- Install OCRMYPDF
+    - Install Python3 with pip3
+    >  sudo yum install -y python3
 
+    > sudo -H pip3 install --upgrade pip
+
+    > sudo pip3 install wheel pybind11 setuptools-rust 
+
+    > sudo yum -y install curl qpdf 
+    
+    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript
+
+    - install leptonica https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
+
+    > sudo yum group install -y "Development Tools"
+
+    > wget http://www.leptonica.org/source/leptonica-1.75.3.tar.gz
+
+    > tar -zxvf leptonica-1.75.3.tar.gz
+
+    > rm leptonica-1.75.3.tar.gz
+
+    > cd leptonica-1.75.3
+
+    > ./autobuild
+
+    > ./configure
+
+    > make -j
+
+    > sudo make install
+
+    - check leptonica is installed
+
+    > ls /usr/local/include
+
+    - install tesseract https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
+
+    > wget https://github.com/tesseract-ocr/tesseract/archive/refs/tags/4.1.1.tar.gz
+
+    > tar -zxvf 4.1.1.tar.gz
+
+    > rm 4.1.1.tar.gz
+    
+    > cd tesseract-4.1.1/
+
+    > ./autogen.sh
+
+    > PKG_CONFIG_PATH=/usr/local/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/local/include ./configure --with-extra-includes=/usr/local/include --with-extra-libraries=/usr/local/lib
+    
+    > LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j
+    
+    > sudo make install
+
+    > sudo ldconfig
+
+    > wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata
+
+    > sudo mv *.traineddata /usr/local/share/tessdata
+
+    > tesseract --version
+
+    > curl https://sh.rustup.rs -sSf | sh
+
+    > source $HOME/.cargo/env
+
+    > sudo cp $HOME/.cargo/env /etc/profile.d/rustc.sh
+
+    > rustc --version
+
+    > sudo pip3 install pikepdf ocrmypdf
