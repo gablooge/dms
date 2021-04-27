@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
 use Illuminate\Support\Facades\DB;
-// use Spatie\PdfToText\Pdf;
+use Symfony\Component\Process\Process;
+use Spatie\PdfToText\Pdf;
 
 use File;
 
@@ -214,10 +215,20 @@ class DokumenController extends Controller
             $request->file->move(public_path('medias'), $fileName);
             $dokumen = Dokumen::create($request->all());
             $dokumen->file = $fileName;
-            // $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
+
+            $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                //throw new \Exception('Failed convert pdf tobe searchable text.');
+            }
+            $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
+
             $dokumen->save();
-            $params['id'] = $dokumen->id;
-            dispatch(new \App\Jobs\PdfToTextJob($params));
+
+            // Job masih sering failed
+            // $params['id'] = $dokumen->id;
+            // dispatch(new \App\Jobs\PdfToTextJob($params));
+
             // other information
             // Tags 
             $this->save_tags($dokumen, $request);
@@ -283,9 +294,17 @@ class DokumenController extends Controller
                 $fileName = time().' - '.$request->file->getClientOriginalName();
                 $request->file->move(public_path('medias'), $fileName);
                 $dokumen->file = $fileName;
-                // $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
-                $params['id'] = $dokumen->id;
-                dispatch(new \App\Jobs\PdfToTextJob($params));
+
+                $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
+                $process->run();
+                if (!$process->isSuccessful()) {
+                    //throw new \Exception('Failed convert pdf tobe searchable text.');
+                }
+                $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
+
+                // Masih sering failed
+                // $params['id'] = $dokumen->id;
+                // dispatch(new \App\Jobs\PdfToTextJob($params));
             }
             $dokumen->tahun = $request->tahun;
             $dokumen->nomor = $request->nomor;
