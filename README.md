@@ -9,6 +9,9 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - **[PDFtoText](https://github.com/spatie/pdf-to-text)**
 - **[Laravel 8](https://laravel.com/docs/8.x/releases)**
 
+## CHECK REQUIREMENTS (*Masih Cuman OCRMYPDF sih*)
+> php artisan check:all
+
 ## Cara Instalasi
 ### Windows dengan WSL2 Ubuntu 20.04
 - Check [this reference for installing wsl2 ubuntu 20.04 on windows 10 https://www.omgubuntu.co.uk/how-to-install-wsl2-on-windows-10](https://www.omgubuntu.co.uk/how-to-install-wsl2-on-windows-10).
@@ -224,3 +227,11 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
     > rustc --version
 
     > sudo pip3 install pikepdf ocrmypdf
+
+### SOLR
+
+- create core
+    > docker exec -it docker_solr_1 solr create_core -c dms
+
+- delete core
+    > docker exec -it docker_solr_1 solr delete -c dms
