@@ -9,7 +9,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - **[PDFtoText](https://github.com/spatie/pdf-to-text)**
 - **[Laravel 8](https://laravel.com/docs/8.x/releases)**
 
-## CHECK REQUIREMENTS (*Masih Cuman OCRMYPDF sih*)
+## CHECK REQUIREMENTS 
 > php artisan check:all
 
 ## Cara Instalasi
