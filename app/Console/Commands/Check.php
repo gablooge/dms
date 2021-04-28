@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Solarium\Client;
 use Solarium\Core\Client\Adapter\Curl;
 use Symfony\Component\EventDispatcher\EventDispatcher; 
+use Illuminate\Support\Facades\DB;
 
 class Check extends Command
 {
@@ -71,7 +72,6 @@ class Check extends Command
         $dispatcher = new EventDispatcher();
         $client = new Client($adapter, $dispatcher, config('solarium'));
         
-        // execute the ping query
         $this->info('PING CHECKING SOLR CONNECTION...');
         try {
             $ping = $client->createPing();
@@ -79,6 +79,14 @@ class Check extends Command
             $this->info('PING SOLR SUCCESS.');
         } catch (\Exception $e) {
             $this->error('PING SOLR FAILED, MAKE SURE THE SOLR IS CONNECTED TO DMS SYSTEM.');
+            $this->error($e->getMessage());
+        }
+        // Test database connection
+        try {
+            $db = DB::connection()->getPdo();
+            $this->info("Connected to the database by ".$db->getAttribute(\PDO::ATTR_DRIVER_NAME)." driver.");
+        } catch (\Exception $e) {
+            $this->error('Database connection failed. ');
             $this->error($e->getMessage());
         }
         return 0;
