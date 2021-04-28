@@ -39,6 +39,56 @@ class DokumenController extends Controller
         }
         return "-";
     }
+    public function convertPDFToText($dokumen, $solr = true)
+    {
+        $response = [
+            'success' => false,
+            'message' => "Convert PDF to Text gagal.",
+            'document' => $dokumen
+        ];
+        
+        try{
+            $local_media_file = public_path('medias/'.$dokumen->file);
+            if(!File::exists($local_media_file)){
+                $response = [
+                    'success' => false,
+                    'message' => "File PDF tidak ditemukan.",
+                    'document' => $dokumen
+                ];
+            }else{ 
+                $fileName = time().' - '.end(explode(" - ", $dokumen->file));
+                $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$fileName)]);
+                $process->run();
+                // if (!$process->isSuccessful()) {
+                // }
+                if(File::exists(public_path('medias/'.$fileName))){
+                    $temp = $dokumen->file;
+                    $dokumen->file = $fileName;
+                    $dokumen->solr = false;
+                    $dokumen->save();
+                    File::delete(public_path('medias/'.$temp));
+                    $response = [
+                        'success' => true,
+                        'message' => "Isi PDF berhasil diubah menjadi text.",
+                        'document' => $dokumen
+                    ];
+                    if($solr){
+                        if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
+                            $dokumen->solr = true;
+                            $dokumen->save();
+                        }
+                    }
+                }
+            }
+        }catch(\Exception $e){
+            $response = [
+                'success' => false,
+                'message' => "Convert PDF to Text gagal. Error: <br />".Str::limit($e->getMessage(), 500),
+                'document' => $dokumen
+            ];
+        }
+        return $response;
+    }
     public function sync(Request $request)
     {
         $params['all'] = $request->query('all', false);
@@ -57,6 +107,7 @@ class DokumenController extends Controller
             return response()->json($data);
         }
     }
+    
     public function solr(Request $request)
     {
         try{
@@ -216,14 +267,8 @@ class DokumenController extends Controller
             $dokumen = Dokumen::create($request->all());
             $dokumen->file = $fileName;
 
-            $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
-            $process->run();
-            if (!$process->isSuccessful()) {
-                //throw new \Exception('Failed convert pdf tobe searchable text.');
-            }
-            $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
-
             $dokumen->save();
+
 
             // Job masih sering failed
             // $params['id'] = $dokumen->id;
@@ -232,6 +277,12 @@ class DokumenController extends Controller
             // other information
             // Tags 
             $this->save_tags($dokumen, $request);
+
+            $response = $this->convertPDFToText($dokumen, true);
+            if($response["success"]){
+                $dokumen = $response["document"]
+            }
+            $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
 
             if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
                 $dokumen->solr = true;
