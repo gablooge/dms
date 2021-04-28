@@ -160,7 +160,11 @@ class SolariumController extends Controller
         $client = new Client($adapter, $dispatcher, config('solarium'));
 
         $update = $client->createUpdate();
-        $update->addDeleteById($id);
+        if($id == 'all'){
+            $update->addDeleteQuery('*:*');
+        }else{
+            $update->addDeleteById($id);
+        }
         $update->addCommit();
         $result = $client->update($update);
         return $result->getStatus();
