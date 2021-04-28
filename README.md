@@ -41,7 +41,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 - Install PHP 7.4
     > sudo apt update && sudo apt upgrade
 
-    > sudo apt install php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unzip poppler-utils ocrmypdf leptonica-progs libleptonica-dev
+    > sudo apt install php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unzip poppler-utils ocrmypdf leptonica-progs libleptonica-dev zlib1g-dev
 
     > php -v
 
@@ -133,6 +133,10 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
     > ./configure && make
 
     > sudo make install
+
+    > cd ..
+
+    > sudo rm -r jbig2enc
 
 - Pastikan masih berada dalam folder root project dan pastikan versi composer nya 1.x bukan 2.x
 
@@ -227,6 +231,17 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
     > rustc --version
 
     > sudo pip3 install pikepdf ocrmypdf
+
+- Install JBIG2 for OCRMYPDF
+    > git clone https://github.com/agl/jbig2enc
+
+    > cd jbig2enc
+
+    > ./autogen.sh
+
+    > ./configure && make
+
+    > sudo make install
 
 ### SOLR
 

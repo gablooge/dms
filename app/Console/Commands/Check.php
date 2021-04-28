@@ -67,6 +67,12 @@ class Check extends Command
         }else{
             $this->error('tesseract NOT FOUND! Please Install tesseract>=4.0.0.');
         }
+        // Check jbig2
+        if (`which jbig2`) {
+            $this->info('jbig2 found!');
+        }else{
+            $this->error('jbig2 NOT FOUND! Please Install jbig2.');
+        }
         // Ping SOLR
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
