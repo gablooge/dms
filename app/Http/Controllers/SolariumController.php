@@ -39,7 +39,7 @@ class SolariumController extends Controller
             'query'         => '*:*',
             'start'         => "0",
             'rows'          => "0",
-            'sort'          => array('tahun' => 'desc')
+            'sort'          => array('id' => 'asc')
         );
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
@@ -77,7 +77,7 @@ class SolariumController extends Controller
             'query'         => $query,
             'start'         => $start,
             'rows'          => $length,
-            'sort'          => array('tahun' => 'desc')
+            'sort'          => array('id' => 'asc')
         );
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
