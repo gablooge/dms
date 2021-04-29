@@ -58,7 +58,7 @@ class DokumenController extends Controller
             }else{ 
                 $tmp = explode(' - ', $dokumen->file);
                 $tmp = end($tmp);
-                $fileName = time().' - '.$tmp;
+                $fileName = time().'C - '.$tmp;
                 $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$fileName)]);
                 $process->run();
                 // if (!$process->isSuccessful()) {
