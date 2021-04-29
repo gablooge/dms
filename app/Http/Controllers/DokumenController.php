@@ -56,7 +56,9 @@ class DokumenController extends Controller
                     'document' => $dokumen
                 ];
             }else{ 
-                $fileName = time().' - '.end(explode(" - ", $dokumen->file));
+                $tmp = explode(' - ', $dokumen->file);
+                $tmp = end($tmp);
+                $fileName = time().' - '.$tmp;
                 $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$fileName)]);
                 $process->run();
                 // if (!$process->isSuccessful()) {
@@ -269,6 +271,11 @@ class DokumenController extends Controller
 
             $dokumen->save();
 
+            $response = $this->convertPDFToText($dokumen, false);
+            if($response["success"]){
+                $dokumen = $response["document"];
+            }
+            $dokumen->isi = Pdf::getText(public_path('medias/'.$dokumen->file));
 
             // Job masih sering failed
             // $params['id'] = $dokumen->id;
@@ -277,12 +284,6 @@ class DokumenController extends Controller
             // other information
             // Tags 
             $this->save_tags($dokumen, $request);
-
-            $response = $this->convertPDFToText($dokumen, true);
-            if($response["success"]){
-                $dokumen = $response["document"]
-            }
-            $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
 
             if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
                 $dokumen->solr = true;
