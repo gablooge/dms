@@ -346,13 +346,12 @@ class DokumenController extends Controller
                 $fileName = time().' - '.$request->file->getClientOriginalName();
                 $request->file->move(public_path('medias'), $fileName);
                 $dokumen->file = $fileName;
-
-                $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$dokumen->file)]);
-                $process->run();
-                if (!$process->isSuccessful()) {
-                    //throw new \Exception('Failed convert pdf tobe searchable text.');
+                $dokumen->save();
+                $response = $this->convertPDFToText($dokumen, false);
+                if($response["success"]){
+                    $dokumen = $response["document"];
                 }
-                $dokumen->isi = Pdf::getText(public_path('medias/'.$fileName));
+                $dokumen->isi = Pdf::getText(public_path('medias/'.$dokumen->file));
 
                 // Masih sering failed
                 // $params['id'] = $dokumen->id;
