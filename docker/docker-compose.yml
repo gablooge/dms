@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+    app:
+      build: 
+        context: .
+        dockerfile: centos7.dockerfile
+      container_name: dms_app
+      image: dms_app
+      ports:
+        - "8090:8000"
+
+volumes:
+    app_data:

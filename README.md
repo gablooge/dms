@@ -159,10 +159,25 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 ### Centos 7
 - **[Centos 7](https://www.cyberciti.biz/faq/install-php-7-x-on-centos-8-for-nginx/)**
 
+- Install PHP 7.4
+    - Add EPEL and REMI Repository
+    > sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+    > sudo yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+    - Install PHP 7.4 on CentOS 7
+    > sudo yum -y install yum-utils
+
+    > sudo yum-config-manager --enable remi-php74
+
+    > sudo yum update
+    
+    > sudo yum install php php-cli
+
 
 - Install OCRMYPDF
     - Install Python3 with pip3
-    >  sudo yum install -y python3
+    > sudo yum install -y python3
 
     > sudo -H pip3 install --upgrade pip
 
