@@ -172,7 +172,43 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > sudo yum update
     
-    > sudo yum install php php-cli
+    > sudo yum -y install php php-cli
+
+- Install Oracle Client and PHP OCI8
+    > sudo yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio
+    
+    > sudo rpm -ivh docker/centos7/oracle-instantclient12.2-*
+
+    > sudo su
+
+    > echo "export ORACLE_HOME=/usr/lib/oracle/12.2/client64" | tee -a /etc/profile
+
+    > echo "export ORACLE_BASE=/usr/lib/oracle/12.2" | tee -a /etc/profile
+
+    > echo "export LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib" | tee -a /etc/profile
+
+    > echo "export LD_LIBRARY_PATH64=/usr/lib/oracle/12.2/client64/lib/" | tee -a /etc/profile
+    
+    > echo "export PATH=\$ORACLE_HOME/bin:\$PATH" | tee -a /etc/profile
+    
+    > ldconfig
+
+    > PHP_DTRACE=yes pecl install oci8-2.2.0 <<< instantclient,/usr/lib/oracle/12.2/client64/lib
+
+    > wget https://www.php.net/distributions/php-7.4.18.tar.gz
+
+    > tar xvf php-7.4.18.tar.gz
+
+    > cd php-7.4.18/ext/pdo_oci/
+
+    > phpize
+
+    > ./configure --with-pdo-oci=instantclient,/usr/lib/oracle/12.2/client64/lib
+
+    > make 
+
+    > make install
+
 
 
 - Install OCRMYPDF
