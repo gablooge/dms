@@ -209,7 +209,53 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > make install
 
+- Install Nginx
+    > sudo yum install nginx
 
+    > sudo systemctl start nginx
+
+    > sudo systemctl enable nginx
+
+    > sudo systemctl status nginx
+
+    > sudo systemctl start php-fpm
+
+    > sudo systemctl enable php-fpm
+    
+    > sudo systemctl status php-fpm
+
+- Clone project into /usr/share/nginx/html/
+    - setting environment variables
+    > cp .env.example .env
+    
+    - pastikan telah tersetting untuk variabel-variabel berikut:
+        - APP_KEY
+        - DB_SEARCH=SOLR
+        - DB_CONNECTION=oracle
+        - DB_HOST=127.0.0.1
+        - DB_PORT=1521
+        - DB_DATABASE=laravel
+        - DB_USERNAME=root
+        - DB_PASSWORD=
+        - SOLR_HOST=127.0.0.1
+        - SOLR_PORT=80
+        - SOLR_PATH=/solr/
+        - SOLR_CORE=dms
+        - BIN_OCRMYPDF = /usr/bin/ocrmypdf
+
+
+- Install Composer 
+    > sudo curl -sS https://getcomposer.org/installer | php
+
+    > sudo mv composer.phar /usr/local/bin/composer
+
+    > sudo chmod +x /usr/local/bin/composer
+
+    > sudo composer self-update --1
+
+    > cd /usr/share/nginx/html/{PROJECT_DIR}
+
+    > composer install
 
 - Install OCRMYPDF
     - Install Python3 with pip3

@@ -2,12 +2,17 @@ version: '3.7'
 services:
     app:
       build: 
-        context: .
-        dockerfile: centos7.dockerfile
+        context: ../
+        dockerfile: docker/centos7.dockerfile
       container_name: dms_app
       image: dms_app
+      privileged: true
+      tmpfs:
+        - /run
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
       ports:
-        - "8090:8000"
+        - "8090:80"
 
 volumes:
     app_data:

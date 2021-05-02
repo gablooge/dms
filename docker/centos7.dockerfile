@@ -5,7 +5,7 @@ RUN yum -y update
 RUN mkdir -p /opt/php74/
 
 # Add EPEL and REMI Repository
-COPY centos7/* /opt/php74/
+COPY docker/centos7/* /opt/php74/
 RUN yum -y install /opt/php74/epel-release-latest-7.noarch.rpm
 RUN yum -y install /opt/php74/remi-release-7.rpm
 
@@ -15,9 +15,11 @@ RUN yum-config-manager --enable remi-php74
 
 RUN yum -y update
 
+RUN yum history sync
+
 RUN yum -y install php php-cli
 
-RUN yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio
+RUN yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio 
 
 # Install Oracle Client and PHP OCI
 RUN rpm -ivh /opt/php74/oracle-instantclient12.2-*
@@ -38,9 +40,46 @@ RUN ldconfig
 
 RUN PHP_DTRACE=yes pecl install oci8-2.2.0 <<< instantclient,/usr/lib/oracle/12.2/client64/lib
 
-COPY php7418/* /opt/php74/
+COPY docker/php7418/* /opt/php74/
 
 RUN chmod +x /opt/php74/install.sh
 RUN /opt/php74/install.sh
 
+# Systemd integration
+ENV container docker
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+VOLUME [ "/sys/fs/cgroup" ]
+
+# Install Nginx
+RUN yum -y install nginx php-fpm
+# RUN systemctl start nginx
+RUN systemctl enable nginx
+# RUN systemctl status nginx
+# RUN systemctl start php-fpm
+RUN systemctl enable php-fpm
+# RUN systemctl status php-fpm
+
+COPY . /usr/share/nginx/html/dms
+
+# RUN chown -R nginx:nginx /usr/share/nginx/html
+RUN chgrp -R nginx /usr/share/nginx/html
+RUN chmod -R ug+rwx /usr/share/nginx/html
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/composer
+RUN composer self-update --1
+
+RUN cd /usr/share/nginx/html/dms && composer install
+
 CMD ["/usr/sbin/init"]
+# ENTRYPOINT ["/usr/sbin/nginx","-g","daemon off;"]
