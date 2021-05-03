@@ -19,7 +19,7 @@ RUN yum history sync
 
 RUN yum -y install php php-cli
 
-RUN yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio 
+RUN yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio which
 
 # Install Oracle Client and PHP OCI
 RUN rpm -ivh /opt/php74/oracle-instantclient12.2-*
@@ -80,6 +80,9 @@ RUN chmod +x /usr/local/bin/composer
 RUN composer self-update --1
 
 RUN cd /usr/share/nginx/html/dms && composer install
+
+# Install pdftotext
+RUN yum -y install poppler-utils git
 
 CMD ["/usr/sbin/init"]
 # ENTRYPOINT ["/usr/sbin/nginx","-g","daemon off;"]

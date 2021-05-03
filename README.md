@@ -172,10 +172,10 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > sudo yum update
     
-    > sudo yum -y install php php-cli
+    > sudo yum -y install php php-cli git
 
 - Install Oracle Client and PHP OCI8
-    > sudo yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio
+    > sudo yum -y install php php-pecl-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-intl php-mbstring php-opcache php-process systemtap-sdt-devel php-pear php-json php-devel php-common php-bcmath php-pdo php-oci8 libaio which
     
     > sudo rpm -ivh docker/centos7/oracle-instantclient12.2-*
 
@@ -241,8 +241,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
         - SOLR_PORT=80
         - SOLR_PATH=/solr/
         - SOLR_CORE=dms
-        - BIN_OCRMYPDF = /usr/bin/ocrmypdf
-
+        - BIN_OCRMYPDF=/usr/bin/ocrmypdf
 
 - Install Composer 
     > sudo curl -sS https://getcomposer.org/installer | php
@@ -257,19 +256,18 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > composer install
 
-- Install OCRMYPDF
-    - Install Python3 with pip3
-    > sudo yum install -y python3
+- Check some requirements
+    > php artisan check:all
 
-    > sudo -H pip3 install --upgrade pip
+- Pastikan pdf-to-text sudah terinstall
 
-    > sudo pip3 install wheel pybind11 setuptools-rust  
+    > which pdftotext
 
-    > sudo yum -y install curl qpdf 
-    
-    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript pngquant
+    - Jika belum install dengan command di bawah ini
 
-    - install leptonica https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
+    > sudo yum install poppler-utils
+
+- install leptonica https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
 
     > sudo yum group install -y "Development Tools"
 
@@ -293,6 +291,35 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > ls /usr/local/include
 
+
+- Install JBIG2 for OCRMYPDF
+    > git clone https://github.com/agl/jbig2enc
+
+    > cd jbig2enc
+
+    > ./autogen.sh
+
+    > ./configure && make
+
+    > sudo make install
+
+    > cd ..
+
+    > sudo rm -rf jbig2enc
+
+- Install OCRMYPDF
+    - Install Python3 with pip3
+    > sudo yum install -y python3
+
+    > sudo -H pip3 install --upgrade pip
+
+    > sudo pip3 install wheel pybind11 setuptools-rust  
+
+    > sudo yum -y install curl qpdf 
+    
+    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript pngquant
+
+    
     - install tesseract https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
 
     > wget https://github.com/tesseract-ocr/tesseract/archive/refs/tags/4.1.1.tar.gz
@@ -329,20 +356,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > sudo pip3 install pikepdf ocrmypdf
 
-- Install JBIG2 for OCRMYPDF
-    > git clone https://github.com/agl/jbig2enc
 
-    > cd jbig2enc
-
-    > ./autogen.sh
-
-    > ./configure && make
-
-    > sudo make install
-
-    > cd ..
-
-    > sudo rm -r jbig2enc
 
 
     
