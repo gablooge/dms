@@ -11,8 +11,9 @@ services:
         - /run
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        - app_media:/usr/share/nginx/html/dms/public/medias
       ports:
         - "8090:80"
 
 volumes:
-    app_data:
+    app_media:

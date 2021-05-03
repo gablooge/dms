@@ -58,16 +58,18 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
+COPY . /usr/share/nginx/html/dms
+
 # Install Nginx
 RUN yum -y install nginx php-fpm
+
+RUN cp /usr/share/nginx/html/dms/docker/nginx.conf /etc/nginx/nginx.conf
 # RUN systemctl start nginx
 RUN systemctl enable nginx
 # RUN systemctl status nginx
 # RUN systemctl start php-fpm
 RUN systemctl enable php-fpm
 # RUN systemctl status php-fpm
-
-COPY . /usr/share/nginx/html/dms
 
 # RUN chown -R nginx:nginx /usr/share/nginx/html
 RUN chgrp -R nginx /usr/share/nginx/html
@@ -92,6 +94,10 @@ RUN cd /usr/share/nginx/html/dms/docker/pdftotext/jbig2enc && ./autogen.sh && ./
 # install tesseract
 RUN cd /usr/share/nginx/html/dms/docker/pdftotext/tesseract-4.1.1/ && ./autogen.sh && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/local/include ./configure --with-extra-includes=/usr/local/include --with-extra-libraries=/usr/local/lib && LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j && make install && ldconfig
 RUN mv /usr/share/nginx/html/dms/docker/pdftotext/*.traineddata /usr/local/share/tessdata
+# Install OCRMYPDF
+RUN yum install -y python3
+RUN pip3 install --upgrade pip
+RUN pip3 install pikepdf ocrmypdf
 
 CMD ["/usr/sbin/init"]
 # ENTRYPOINT ["/usr/sbin/nginx","-g","daemon off;"]

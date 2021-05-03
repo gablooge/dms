@@ -242,7 +242,35 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
         - SOLR_PATH=/solr/
         - SOLR_CORE=dms
         - BIN_OCRMYPDF=/usr/bin/ocrmypdf
+- Nginx configuration example
+    - **fastcgi_pass**: Ada 2 kondisi (Apabila di dalam folder **/var/run/php-fpm/** ada file **phpfpm.sock** maka yang digunakan adalah fastcgi_pass **unix:/var/run/php-fpm/phpfpm.sock**. Apabila di dalam folder tersebut hanya ada file **php-fpm.pid** maka kita bisa menggunakan **fastcgi_pass 127.0.0.1:9000**)
+    ```bash
+    server {
+        listen  80 default_server;
+        server_name  _;
 
+        root         /usr/share/nginx/html/laravel/public;
+        index index.php;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php {
+                include fastcgi.conf;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass 127.0.0.1:9000;
+        }
+
+        location ~ /\.ht {
+                deny all;
+        }
+
+    }
+    ```
 - Install Composer 
     > sudo curl -sS https://getcomposer.org/installer | php
 
@@ -339,24 +367,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > sudo -H pip3 install --upgrade pip
 
-    > sudo pip3 install wheel pybind11 setuptools-rust  
-
-    > sudo yum -y install curl qpdf 
-    
-    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript pngquant
-
-    > curl https://sh.rustup.rs -sSf | sh
-
-    > source $HOME/.cargo/env
-
-    > sudo cp $HOME/.cargo/env /etc/profile.d/rustc.sh
-
-    > rustc --version
-
     > sudo pip3 install pikepdf ocrmypdf
-
-
-
 
     
 ### SOLR
