@@ -307,20 +307,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > sudo rm -rf jbig2enc
 
-- Install OCRMYPDF
-    - Install Python3 with pip3
-    > sudo yum install -y python3
-
-    > sudo -H pip3 install --upgrade pip
-
-    > sudo pip3 install wheel pybind11 setuptools-rust  
-
-    > sudo yum -y install curl qpdf 
-    
-    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript pngquant
-
-    
-    - install tesseract https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
+- install tesseract https://www.hoangdung.net/2020/01/how-to-install-tesseract-4-on-centos-7.html
 
     > wget https://github.com/tesseract-ocr/tesseract/archive/refs/tags/4.1.1.tar.gz
 
@@ -345,6 +332,18 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
     > sudo mv *.traineddata /usr/local/share/tessdata
 
     > tesseract --version
+
+- Install OCRMYPDF
+    - Install Python3 with pip3
+    > sudo yum install -y python3
+
+    > sudo -H pip3 install --upgrade pip
+
+    > sudo pip3 install wheel pybind11 setuptools-rust  
+
+    > sudo yum -y install curl qpdf 
+    
+    > sudo yum -y install libstdc++ autoconf automake libtool autoconf-archive pkg-config gcc gcc-c++ make libjpeg-devel libpng-devel libtiff-devel zlib-devel ghostscript pngquant
 
     > curl https://sh.rustup.rs -sSf | sh
 
