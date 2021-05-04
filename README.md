@@ -309,7 +309,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > ./autobuild
 
-    > ./configure
+    > ./configure --prefix=/usr --with-extra-libraries=/usr/lib
 
     > make -j
 
@@ -317,7 +317,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     - check leptonica is installed
 
-    > ls /usr/local/include
+    > ls /usr/include/leptonica
 
 
 - Install JBIG2 for OCRMYPDF
@@ -347,9 +347,9 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > ./autogen.sh
 
-    > PKG_CONFIG_PATH=/usr/local/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/local/include ./configure --with-extra-includes=/usr/local/include --with-extra-libraries=/usr/local/lib
+    > PKG_CONFIG_PATH=/usr/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/include ./configure --prefix=/bin --with-extra-includes=/usr/include --with-extra-libraries=/usr/lib
     
-    > LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j
+    > LDFLAGS="-L/usr/lib" CFLAGS="-I/usr/include" make -j
     
     > sudo make install
 
@@ -357,7 +357,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata
 
-    > sudo mv *.traineddata /usr/local/share/tessdata
+    > sudo mv *.traineddata /usr/share/tessdata
 
     > tesseract --version
 

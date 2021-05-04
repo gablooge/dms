@@ -60,27 +60,38 @@ class DokumenController extends Controller
                 $tmp = end($tmp);
                 $fileName = time().'C - '.$tmp;
                 $process = new Process([env('BIN_OCRMYPDF', '/usr/bin/ocrmypdf'), public_path('medias/'.$dokumen->file), public_path('medias/'.$fileName)]);
-                $process->run();
+                // $process->run();
                 // if (!$process->isSuccessful()) {
                 // }
-                if(File::exists(public_path('medias/'.$fileName))){
-                    $temp = $dokumen->file;
-                    $dokumen->file = $fileName;
-                    $dokumen->solr = false;
-                    $dokumen->save();
-                    File::delete(public_path('medias/'.$temp));
-                    $response = [
-                        'success' => true,
-                        'message' => "Isi PDF berhasil diubah menjadi text.",
-                        'document' => $dokumen
-                    ];
-                    if($solr){
-                        if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
-                            $dokumen->solr = true;
-                            $dokumen->save();
+                try {
+                    $process->mustRun();
+                    if(File::exists(public_path('medias/'.$fileName))){
+                        $temp = $dokumen->file;
+                        $dokumen->file = $fileName;
+                        $dokumen->solr = false;
+                        $dokumen->save();
+                        File::delete(public_path('medias/'.$temp));
+                        $response = [
+                            'success' => true,
+                            'message' => "Isi PDF berhasil diubah menjadi text.",
+                            'document' => $dokumen
+                        ];
+                        if($solr){
+                            if(app('App\Http\Controllers\SolariumController')->update($dokumen) == 0){
+                                $dokumen->solr = true;
+                                $dokumen->save();
+                            }
                         }
                     }
+                } catch (ProcessFailedException $exception) {
+                    $response = [
+                        'success' => false,
+                        'message' => "Convert PDF to Text gagal. Error: <br />".Str::limit($exception->getMessage(), 2000),
+                        'document' => $dokumen
+                    ];
                 }
+                // dd($process);
+                
             }
         }catch(\Exception $e){
             $response = [

@@ -88,12 +88,12 @@ RUN yum -y install poppler-utils git
 # Install leptonica
 RUN yum group install -y "Development Tools"
 RUN cd /usr/share/nginx/html/dms/docker/pdftotext/ && tar -zxvf leptonica-1.75.3.tar.gz && rm leptonica-1.75.3.tar.gz
-RUN cd /usr/share/nginx/html/dms/docker/pdftotext/leptonica-1.75.3 && ./autobuild && ./configure && make -j && make install
-# Install jbig2enc
+RUN cd /usr/share/nginx/html/dms/docker/pdftotext/leptonica-1.75.3 && ./autobuild && ./configure --prefix=/usr && make -j && make install
+# # Install jbig2enc
 RUN cd /usr/share/nginx/html/dms/docker/pdftotext/jbig2enc && ./autogen.sh && ./configure && make && make install
-# install tesseract
-RUN cd /usr/share/nginx/html/dms/docker/pdftotext/tesseract-4.1.1/ && ./autogen.sh && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/local/include ./configure --with-extra-includes=/usr/local/include --with-extra-libraries=/usr/local/lib && LDFLAGS="-L/usr/local/lib" CFLAGS="-I/usr/local/include" make -j && make install && ldconfig
-RUN mv /usr/share/nginx/html/dms/docker/pdftotext/*.traineddata /usr/local/share/tessdata
+# # install tesseract
+RUN cd /usr/share/nginx/html/dms/docker/pdftotext/tesseract-4.1.1/ && ./autogen.sh && PKG_CONFIG_PATH=/usr/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/include ./configure --prefix=/usr --with-extra-includes=/usr/include --with-extra-libraries=/usr/lib && LDFLAGS="-L/usr/lib" CFLAGS="-I/usr/include" make -j && make install && ldconfig
+RUN mv /usr/share/nginx/html/dms/docker/pdftotext/*.traineddata /usr/share/tessdata
 # Install OCRMYPDF
 RUN yum install -y python3
 RUN pip3 install --upgrade pip
