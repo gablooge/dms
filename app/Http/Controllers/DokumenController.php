@@ -282,6 +282,8 @@ class DokumenController extends Controller
 
             $dokumen->save();
 
+            $error_list = array('Data Dokumen telah disimpan dalam database.');
+
             $response = $this->convertPDFToText($dokumen, false);
             if($response["success"]){
                 $dokumen = $response["document"];
@@ -295,12 +297,16 @@ class DokumenController extends Controller
             // other information
             // Tags 
             $this->save_tags($dokumen, $request);
-
-            if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
-                $dokumen->solr = true;
-                $dokumen->save();
+            
+            try{
+                if(app('App\Http\Controllers\SolariumController')->add($dokumen) == 0){
+                    $dokumen->solr = true;
+                    $dokumen->save();
+                }
+            }catch(\Exception $e){
+                array_push($error_list, "SOLR Error: ".Str::limit($e->getMessage(), 500));
             }
-            return redirect()->route('dokumen.index')->with('messages', 'Data Dokumen telah disimpan');
+            return redirect()->route('dokumen.index')->with('messages', join(". ", $error_list));
         }catch(\Exception $e){
             return redirect()->route('dokumen.create')->with('messages', 'Data Dokumen gagal disimpan. Error: <br />'.Str::limit($e->getMessage(), 500));
             // $dokumen = new Dokumen($request->all());
