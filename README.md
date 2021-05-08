@@ -309,7 +309,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > ./autobuild
 
-    > ./configure --prefix=/usr --with-extra-libraries=/usr/lib
+    > ./configure --prefix=/usr 
 
     > make -j
 
@@ -347,7 +347,7 @@ DMS merupakan sebuah sistem yang digunakan untuk mengelola dokumen-dokumen PDF s
 
     > ./autogen.sh
 
-    > PKG_CONFIG_PATH=/usr/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/include ./configure --prefix=/bin --with-extra-includes=/usr/include --with-extra-libraries=/usr/lib
+    > PKG_CONFIG_PATH=/usr/lib/pkgconfig LIBLEPT_HEADERSDIR=/usr/include ./configure --prefix=/usr --with-extra-includes=/usr/include --with-extra-libraries=/usr/lib
     
     > LDFLAGS="-L/usr/lib" CFLAGS="-I/usr/include" make -j
     
