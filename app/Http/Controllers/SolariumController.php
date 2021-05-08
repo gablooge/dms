@@ -73,11 +73,16 @@ class SolariumController extends Controller
         if (!empty($q)) {
             $query = join(" AND ", $q);
         }
+        $sort = array('id' => 'asc');
+        if($request->has('order') && $request->order[0]['column'] != "0"){
+            $sort = array($request->columns[$request->order[0]['column']]['name']."_str" => $request->order[0]['dir']);
+        }
+        // dd($sort);
         $select = array(
             'query'         => $query,
             'start'         => $start,
             'rows'          => $length,
-            'sort'          => array('id' => 'asc')
+            'sort'          => $sort
         );
         $adapter = new Curl();
         $dispatcher = new EventDispatcher();
